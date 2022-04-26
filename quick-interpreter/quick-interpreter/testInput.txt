@@ -1,0 +1,7 @@
+﻿bank urmom;
+question urmom mc "Ur mom gay?" "yes" "no" "nO" "No" 1;
+question urmom fr "Summarize the war of 1812." 12;
+question urmom tf "The answer is true." T;
+set_ans urmom[2] T;
+test momTest urmom;
+generate momTest 2;

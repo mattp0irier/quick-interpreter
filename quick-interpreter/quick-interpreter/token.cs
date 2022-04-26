@@ -2,27 +2,22 @@
 using System.IO;
 using System.Collections.Generic;
 
-namespace trmpLox
+// Matthew Poirier and Trevor Russell, token.cs
+
+namespace quick
 {
     // TokenType: enum for token types
     public enum TokenType
     {
         // One-chars
-        LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
-        COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR,
-
-        // Comparitors and Equal
-        BANG, BANG_EQUAL,
-        EQUAL, EQUAL_EQUAL,
-        GREATER, GREATER_EQUAL,
-        LESS, LESS_EQUAL,
+        LEFT_PAREN, RIGHT_PAREN, LEFT_BRACKET, RIGHT_BRACKET, LEFT_BRACE, RIGHT_BRACE,
+        COMMA, SEMICOLON, T, F,
 
         // Literals
         IDENTIFIER, STRING, NUMBER,
 
         // Other Keywords
-        AND, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
-        PRINT, RETURN, THIS, TRUE, VAR, WHILE,
+        PRINT, GENERATE, TEST, BANK, QUESTION, SHUFFLE, DELETE, SET_ANS, MC, TF, MT, SA, FR,
 
         EOF
     };
