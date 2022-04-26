@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace trmpLox
+namespace quick
 {
     public class Scanner
     {
@@ -14,20 +14,19 @@ namespace trmpLox
         int line = 1;
         readonly Hashtable keywords = new Hashtable()
     {
-        {"and", TokenType.AND},
-        {"else", TokenType.ELSE},
-        {"false", TokenType.FALSE},
-        {"for", TokenType.FOR},
-        {"fun", TokenType.FUN},
-        {"if", TokenType.IF},
-        {"nil", TokenType.NIL},
-        {"or", TokenType.OR},
         {"print", TokenType.PRINT},
-        {"return", TokenType.RETURN},
-        {"this", TokenType.THIS},
-        {"true", TokenType.TRUE},
-        {"var", TokenType.VAR},
-        {"while", TokenType.WHILE}
+        {"generate", TokenType.GENERATE},
+        {"test", TokenType.TEST},
+        {"bank", TokenType.BANK},
+        {"question", TokenType.QUESTION},
+        {"shuffle", TokenType.SHUFFLE},
+        {"delete", TokenType.DELETE},
+        {"set_ans", TokenType.SET_ANS},
+        {"mc", TokenType.MC},
+        {"tf", TokenType.TF},
+        {"mt", TokenType.MT},
+        {"sa", TokenType.SA},
+        {"fr", TokenType.FR},
     };
 
         public Scanner(String source)
@@ -61,47 +60,20 @@ namespace trmpLox
                     addToken(TokenType.LEFT_BRACE); break;
                 case '}':
                     addToken(TokenType.RIGHT_BRACE); break;
+                case '[':
+                    addToken(TokenType.LEFT_BRACKET); break;
+                case ']':
+                    addToken(TokenType.RIGHT_BRACKET); break;
                 case ',':
                     addToken(TokenType.COMMA); break;
-                case '.':
-                    addToken(TokenType.DOT); break;
-                case '-':
-                    addToken(TokenType.MINUS); break;
-                case '+':
-                    addToken(TokenType.PLUS); break;
                 case ';':
                     addToken(TokenType.SEMICOLON); break;
-                case '*':
-                    addToken(TokenType.STAR); break;
 
 
-                //MIGHT BE SINGLE OR TWO-CHARACTER OPS
-                case '!':
-                    if (match('=')) addToken(TokenType.BANG_EQUAL);
-                    else addToken(TokenType.BANG);
-                    break;
-                case '=':
-                    if (match('=')) addToken(TokenType.EQUAL_EQUAL);
-                    else addToken(TokenType.EQUAL);
-                    break;
-                case '<':
-                    if (match('=')) addToken(TokenType.LESS_EQUAL);
-                    else addToken(TokenType.LESS);
-                    break;
-                case '>':
-                    if (match('=')) addToken(TokenType.GREATER_EQUAL);
-                    else addToken(TokenType.GREATER);
-                    break;
-
-                //CHECK FOR COMMENTS
+                //single slash is a comment
                 case '/':
-                    if (match('/'))
-                    {
-                        // don't read the rest of the line if it's a comment
-                        while (Peek() != '\n' && !done()) Advance();
-                    }
-                    else addToken(TokenType.SLASH);
-                    break;
+                    // don't read the rest of the line if it's a comment
+                    while (Peek() != '\n' && !done()) Advance(); break;
                 case ' ':
                 case '\r':
                 case '\t':
@@ -118,7 +90,8 @@ namespace trmpLox
                     else if (Char.IsLetter(c) || c == '_')
                         ScanIdentifier();
                     else
-                        TrMpLox.Error(line, "Unexpected Character."); break;
+                        Console.WriteLine("Unhandled character"); break;
+                        //TrMpLox.Error(line, "Unexpected Character."); break;
 
             }
         }
@@ -141,15 +114,7 @@ namespace trmpLox
         {
             while (Char.IsDigit(Peek())) Advance();
 
-            //Is there a decimal point?
-            if (Peek() == '.' && Char.IsDigit(PeekNext()))
-            {
-                Advance();
-
-                while (Char.IsDigit(Peek())) Advance();
-            }
-
-            addToken(TokenType.NUMBER, Double.Parse(source[start..cur], System.Globalization.NumberStyles.AllowDecimalPoint));
+            addToken(TokenType.NUMBER, Int16.Parse(source[start..cur]));
         }
 
         void ScanString()
@@ -161,7 +126,7 @@ namespace trmpLox
             }
             if (done())
             {
-                TrMpLox.Error(line, "Unterminated String");
+                //TrMpLox.Error(line, "Unterminated String");
                 return;
             }
             Advance();
