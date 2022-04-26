@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quick-interpreter", "swift-interpreter\quick-interpreter.csproj", "{B758A28D-5CB0-43F8-866A-005744EFFC28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quick-interpreter", "quick-interpreter\quick-interpreter.csproj", "{DCA6BA8C-1610-492C-926E-38E72B988395}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B758A28D-5CB0-43F8-866A-005744EFFC28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B758A28D-5CB0-43F8-866A-005744EFFC28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B758A28D-5CB0-43F8-866A-005744EFFC28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B758A28D-5CB0-43F8-866A-005744EFFC28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCA6BA8C-1610-492C-926E-38E72B988395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCA6BA8C-1610-492C-926E-38E72B988395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCA6BA8C-1610-492C-926E-38E72B988395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCA6BA8C-1610-492C-926E-38E72B988395}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E340965C-D05C-4B99-8210-D3B97210B96B}
+		SolutionGuid = {ACA77558-DC96-4F30-BFC1-B70EB6EC5359}
 	EndGlobalSection
 EndGlobal
