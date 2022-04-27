@@ -85,12 +85,30 @@ namespace quick_interpreter
 
         Statement DeleteStmt()
         {
-            return new DeleteStmt();
+            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name.");
+            Consume(TokenType.LEFT_BRACKET, "Expect left bracket.");
+
+            int index = int.Parse(Consume(TokenType.NUMBER, "Expect index").lexeme);
+            Consume(TokenType.RIGHT_BRACKET, "Expect right bracket.");
+
+            return new DeleteStmt(name, index);
         }
 
         Statement SetStmt()
         {
-            return new SetStmt();
+            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name.");
+            Consume(TokenType.LEFT_BRACKET, "Expect left bracket.");
+
+            int index = int.Parse(Consume(TokenType.NUMBER, "Expect index").lexeme);
+            Consume(TokenType.RIGHT_BRACKET, "Expect right bracket.");
+
+            Token answer = null;
+            if (Match(TokenType.T) || Match(TokenType.F) || Match(TokenType.NUMBER))
+            {
+                answer = Advance();
+            }
+
+            return new SetStmt(name, index, answer);
         }
 
         Question ParseQuestion()

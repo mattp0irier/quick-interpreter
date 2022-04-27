@@ -117,6 +117,12 @@ namespace quick_interpreter
         public readonly Token bank;
         public readonly int index;
 
+        public DeleteStmt(Token bank, int index)
+        {
+            this.bank = bank;
+            this.index = index;
+        }
+
         public override T accept<T>(Visitor<T> visitor)
         {
             return visitor.visitDeleteStatement(this);
@@ -129,6 +135,13 @@ namespace quick_interpreter
         public readonly Token bank;
         public readonly int index;
         public readonly Token answer;
+
+        public SetStmt(Token bank, int index, Token answer)
+        {
+            this.bank = bank;
+            this.index = index;
+            this.answer = answer;
+        }
 
         public override T accept<T>(Visitor<T> visitor)
         {
