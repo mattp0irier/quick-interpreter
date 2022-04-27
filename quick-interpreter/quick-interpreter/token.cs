@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 // Matthew Poirier and Trevor Russell, token.cs
 
-namespace quick
+namespace quick_interpreter
 {
     // TokenType: enum for token types
     public enum TokenType

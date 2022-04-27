@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace quick
+namespace quick_interpreter
 {
     public class Scanner
     {
@@ -90,8 +90,7 @@ namespace quick
                     else if (Char.IsLetter(c) || c == '_')
                         ScanIdentifier();
                     else
-                        Console.WriteLine("Unhandled character"); break;
-                        //TrMpLox.Error(line, "Unexpected Character."); break;
+                        quick.Error(line, "Unexpected Character."); break;
 
             }
         }
@@ -126,7 +125,7 @@ namespace quick
             }
             if (done())
             {
-                //TrMpLox.Error(line, "Unterminated String");
+                quick.Error(line, "Unterminated String");
                 return;
             }
             Advance();
