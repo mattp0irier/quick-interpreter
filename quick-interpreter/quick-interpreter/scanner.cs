@@ -24,7 +24,6 @@ namespace quick_interpreter
         {"set_ans", TokenType.SET_ANS},
         {"mc", TokenType.MC},
         {"tf", TokenType.TF},
-        {"mt", TokenType.MT},
         {"sa", TokenType.SA},
         {"fr", TokenType.FR},
     };
@@ -68,6 +67,28 @@ namespace quick_interpreter
                     addToken(TokenType.COMMA); break;
                 case ';':
                     addToken(TokenType.SEMICOLON); break;
+                case 't':
+                case 'T':
+                    if (Char.IsLetterOrDigit(Peek()) || Peek() == '_')
+                    {
+                        ScanIdentifier();
+                    }
+                    else
+                    {
+                        addToken(TokenType.T);
+                    }
+                    break;
+                case 'f':
+                case 'F':
+                    if (Char.IsLetterOrDigit(Peek()) || Peek() == '_')
+                    {
+                        ScanIdentifier();
+                    }
+                    else
+                    {
+                        addToken(TokenType.F);
+                    }
+                    break;
 
 
                 //single slash is a comment
@@ -113,7 +134,7 @@ namespace quick_interpreter
         {
             while (Char.IsDigit(Peek())) Advance();
 
-            addToken(TokenType.NUMBER, Int16.Parse(source[start..cur]));
+            addToken(TokenType.NUMBER, Int32.Parse(source[start..cur]));
         }
 
         void ScanString()

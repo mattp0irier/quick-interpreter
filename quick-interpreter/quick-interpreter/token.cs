@@ -17,7 +17,7 @@ namespace quick_interpreter
         IDENTIFIER, STRING, NUMBER,
 
         // Other Keywords
-        PRINT, GENERATE, TEST, BANK, QUESTION, SHUFFLE, DELETE, SET_ANS, MC, TF, MT, SA, FR,
+        PRINT, GENERATE, TEST, BANK, QUESTION, SHUFFLE, DELETE, SET_ANS, MC, TF, SA, FR,
 
         EOF
     };

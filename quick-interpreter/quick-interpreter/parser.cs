@@ -39,12 +39,12 @@ namespace quick_interpreter
 
         Statement GenerateStmt()
         {
-
+            return new GenerateStmt();
         }
 
         Statement TestStmt()
         {
-
+            return new TestStmt();
         }
 
         Statement BankStmt()
@@ -70,34 +70,34 @@ namespace quick_interpreter
 
         Statement QuestionStmt()
         {
-
+            return new QuestionStmt();
         }
 
         Statement PrintStmt()
         {
-
+            return new PrintStmt("");
         }
 
         Statement ShuffleStmt()
         {
-
+            return new ShuffleStmt();
         }
 
         Statement DeleteStmt()
         {
-
+            return new DeleteStmt();
         }
 
         Statement SetStmt()
         {
-
+            return new SetStmt();
         }
 
         Question ParseQuestion()
         {
-            if (Match(TokenType.MC, TokenType.MT, TokenType.TF))
+            if (Check(TokenType.MC))
             {
-                Token type = Previous();
+                Token type = Advance();
                 Token problem = Consume(TokenType.STRING, "Expect string for question.");
                 List<Token> options = new();
                 options.Add(Consume(TokenType.STRING, "Must provide at least one answer."));
@@ -112,6 +112,20 @@ namespace quick_interpreter
                 }
                 return new Question(type, problem, options, solution);
             }
+            else if (Check(TokenType.TF))
+            {
+                Token type = Advance();
+                Token problem = Consume(TokenType.STRING, "Expect string for question.");
+                List<Token> options = new();
+                options.Add(new Token(TokenType.T, "True", "True", -1));
+                options.Add(new Token(TokenType.F, "False", "False", -1));
+                Token solution = Advance();
+                if (solution.type != TokenType.T && solution.type != TokenType.F)
+                {
+                    Console.WriteLine("Answer to T/F question must be T or F.");
+                }
+                return new Question(type, problem, options, solution);
+            }
             else if (Check(TokenType.FR))
             {
                 Token type = Advance();
@@ -123,6 +137,14 @@ namespace quick_interpreter
             {
                 Token type = Advance();
                 Token problem = Consume(TokenType.STRING, "Expect string for question.");
+                if (Peek().GetType() == TokenType.STRING || Peek().GetType() == TokenType.NUMBER)
+                {
+                    Console.WriteLine("Improper number of arguments to Short Answer question, skipping extras");
+                    while (Peek().GetType() == TokenType.STRING || Peek().GetType() == TokenType.NUMBER)
+                    {
+                        Advance();
+                    }
+                }
                 return new Question(type, problem, new List<Token>(), new Token(TokenType.EOF, "", "", -1));
             }
             else
