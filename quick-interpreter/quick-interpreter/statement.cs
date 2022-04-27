@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace quick_interpreter
 {
-    public class Statement
+    public abstract class Statement
     {
         public interface Visitor<T>
         {
@@ -36,7 +36,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitGenerateStatement(this);
         }
     }
 
@@ -48,7 +48,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitTestStatement(this);
         }
     }
 
@@ -66,7 +66,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitBankStatement(this);
         }
     }
 
@@ -80,7 +80,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitQuestionStatement(this);
         }
     }
 
@@ -96,7 +96,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitPrintStatement(this);
         }
     }
 
@@ -107,7 +107,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitShuffleStatement(this);
         }
     }
 
@@ -119,7 +119,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitDeleteStatement(this);
         }
     }
 
@@ -132,7 +132,7 @@ namespace quick_interpreter
 
         public override T accept<T>(Visitor<T> visitor)
         {
-            return null;
+            return visitor.visitSetStatement(this);
         }
     }
 }
