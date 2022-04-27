@@ -35,8 +35,9 @@ namespace quick_interpreter
             {
                 Console.Write("> ");
                 curLine = Console.ReadLine();
-                //if (curLine.Length == 0) break; // break if no input
-               // Run(curLine, interpreter); // run input
+                if (curLine.Length == 0) break; // break if no input
+                Run(curLine);
+                //Run(curLine, interpreter); // run input
             }
         }
 
@@ -62,7 +63,7 @@ namespace quick_interpreter
 
             // Parse
             Parser parser = new(tokens);
-           // List<Statement> stmts = parser.Parse();
+            List<Statement> stmts = parser.Parse();
 
            // if (interpreter == null) interpreter = new Interpreter();
 

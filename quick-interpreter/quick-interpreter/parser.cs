@@ -49,7 +49,23 @@ namespace quick_interpreter
 
         Statement BankStmt()
         {
+            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name.");
 
+            List<Question> questions = new();
+            //May include questions with the declaration
+            if (Match(TokenType.LEFT_BRACE))
+            {
+                while(!(Peek().GetType() == TokenType.RIGHT_BRACE))
+                {
+                    questions.Add(ParseQuestion());
+                    if (Peek().GetType() == TokenType.RIGHT_BRACE) break;
+                    Consume(TokenType.COMMA, "Questions must be separated by a comma");
+                }
+                Consume(TokenType.RIGHT_BRACE, "Question block must end with }");
+            }
+            Consume(TokenType.SEMICOLON, "Bank Statement must end with ;");
+
+            return new BankStmt(name, questions);
         }
 
         Statement QuestionStmt()
@@ -75,6 +91,45 @@ namespace quick_interpreter
         Statement SetStmt()
         {
 
+        }
+
+        Question ParseQuestion()
+        {
+            if (Match(TokenType.MC, TokenType.MT, TokenType.TF))
+            {
+                Token type = Previous();
+                Token problem = Consume(TokenType.STRING, "Expect string for question.");
+                List<Token> options = new();
+                options.Add(Consume(TokenType.STRING, "Must provide at least one answer."));
+                while (Check(TokenType.STRING))
+                {
+                    options.Add(Advance());
+                }
+                Token solution = Consume(TokenType.NUMBER, "Solution must be a number.");
+                if ((int)solution.GetLiteral() < 1 || (int)solution.GetLiteral() > options.Count())
+                {
+                    Console.WriteLine("Solution must be in the range 1 - n, where n is the number of answers provided.");
+                }
+                return new Question(type, problem, options, solution);
+            }
+            else if (Check(TokenType.FR))
+            {
+                Token type = Advance();
+                Token problem = Consume(TokenType.STRING, "Expect string for question.");
+                Token solution = Consume(TokenType.NUMBER, "Expect number for size of free response section.");
+                return new Question(type, problem, new List<Token>(), solution);
+            }
+            else if (Check(TokenType.SA))
+            {
+                Token type = Advance();
+                Token problem = Consume(TokenType.STRING, "Expect string for question.");
+                return new Question(type, problem, new List<Token>(), new Token(TokenType.EOF, "", "", -1));
+            }
+            else
+            {
+                Console.WriteLine("Invalid question type");
+                return new Question();
+            }
         }
 
 
@@ -136,12 +191,16 @@ namespace quick_interpreter
 
     public class Question
     {
-        public readonly string type;
-        public readonly string problem;
-        public readonly List<string> options;
-        public readonly int solution;
+        public readonly Token type;
+        public readonly Token problem;
+        public readonly List<Token> options;
+        public readonly Token solution;
 
-        public Question(string type, string problem, List<string> options, int solution)
+        public Question()
+        {
+            Console.WriteLine("Garbage Question.");
+        }
+        public Question(Token type, Token problem, List<Token> options, Token solution)
         {
             this.type = type;
             this.problem = problem;
