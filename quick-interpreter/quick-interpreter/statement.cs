@@ -74,9 +74,13 @@ namespace quick_interpreter
     {
         // characteristics?
         public readonly Token bank;
-        public readonly Token type;
-        public readonly List<string> options;
-        public readonly int solution;
+        public readonly List<Question> questions;
+
+        public QuestionStmt(Token bank, List<Question> questions)
+        {
+            this.bank = bank;
+            this.questions = questions;
+        }
 
         public override T accept<T>(Visitor<T> visitor)
         {

@@ -70,7 +70,28 @@ namespace quick_interpreter
 
         Statement QuestionStmt()
         {
-            return new QuestionStmt();
+            Token bankName = Consume(TokenType.IDENTIFIER, "Please include a bank name when adding questions.");
+
+            List<Question> questions = new();
+            //May include questions with the declaration
+            if (Match(TokenType.LEFT_BRACE))
+            {
+                while (!(Peek().GetType() == TokenType.RIGHT_BRACE))
+                {
+                    questions.Add(ParseQuestion());
+                    if (Peek().GetType() == TokenType.RIGHT_BRACE) break;
+                    Consume(TokenType.COMMA, "Questions must be separated by a comma");
+                }
+                Consume(TokenType.RIGHT_BRACE, "Question block must end with }");
+            }
+            else
+            {
+                // Only one question
+                questions.Add(ParseQuestion());
+            }
+            Consume(TokenType.SEMICOLON, "Question Statement must end with ;");
+
+            return new QuestionStmt(bankName, questions);
         }
 
         Statement PrintStmt()
@@ -105,7 +126,7 @@ namespace quick_interpreter
             Token answer = null;
             if (Match(TokenType.T) || Match(TokenType.F) || Match(TokenType.NUMBER))
             {
-                answer = Advance();
+                answer = Previous();
             }
 
             return new SetStmt(name, index, answer);
