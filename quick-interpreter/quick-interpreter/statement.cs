@@ -50,10 +50,12 @@ namespace quick_interpreter
     public class BankStmt : Statement
     {
         // characteristics?
+        public readonly Token name;
         public readonly List<Question> questions;
 
-        public BankStmt(List<Question> questions)
+        public BankStmt(Token name, List<Question> questions)
         {
+            this.name = name;
             this.questions = questions;
         }
 
