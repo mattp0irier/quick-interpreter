@@ -100,11 +100,6 @@ namespace quick_interpreter
             return new PrintStmt(itemToPrint);
         }
 
-        Statement ShuffleStmt()
-        {
-            return new ShuffleStmt();
-        }
-
         Statement DeleteStmt()
         {
             Token name = Consume(TokenType.IDENTIFIER, "Expect bank name.");

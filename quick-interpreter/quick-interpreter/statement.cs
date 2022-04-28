@@ -104,17 +104,6 @@ namespace quick_interpreter
         }
     }
 
-    public class ShuffleStmt : Statement
-    {
-        // characteristics?
-        // does this need any????
-
-        public override T accept<T>(Visitor<T> visitor)
-        {
-            return visitor.visitShuffleStatement(this);
-        }
-    }
-
     public class DeleteStmt : Statement
     {
         // characteristics?
