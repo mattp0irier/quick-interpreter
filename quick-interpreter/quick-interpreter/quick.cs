@@ -29,15 +29,14 @@ namespace quick_interpreter
         // RunPrompt: prompt user for input until blank entered
         static void RunPrompt()
         {
-            //Interpreter interpreter = new Interpreter();
+            Interpreter interpreter = new Interpreter();
             string curLine = "initial value";
             while (true)
             {
                 Console.Write("> ");
                 curLine = Console.ReadLine();
                 if (curLine.Length == 0) break; // break if no input
-                Run(curLine);
-                //Run(curLine, interpreter); // run input
+                Run(curLine, interpreter); // run input
             }
         }
 
@@ -46,7 +45,7 @@ namespace quick_interpreter
         {
             string input = File.ReadAllText(filename);
             //Run(input, null);
-            Run(input);
+            //Run(input);
 
             // exit if errors
            // if (hadError) System.Environment.Exit(65);
@@ -55,7 +54,7 @@ namespace quick_interpreter
 
         // Run: execute string input
        // static void Run(string line, Interpreter? interpreter)
-        static void Run(string line)
+        static void Run(string line, Interpreter interpreter)
         {
             // Scan
             Scanner scanner = new(line);
@@ -74,7 +73,7 @@ namespace quick_interpreter
             //if (hadError) return; // if error, break
 
             // Interpret
-            //interpreter.interpret(stmts);
+            interpreter.interpret(stmts);
         }
 
         // Error: take line number and error message and report error

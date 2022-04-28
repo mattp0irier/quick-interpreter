@@ -31,9 +31,29 @@ namespace quick_interpreter
             return null;
         }
 
-        public void DefineBank(string name, List<Question> questions)
+        public void DefineBank(Token name, List<Question> questions)
         {
-            banks.Add(name, questions);
+            banks.Add(name.lexeme, questions);
+            Console.WriteLine("Bank " + name.lexeme + ":");
+            foreach (Question question in banks[name.lexeme])
+            {
+                Console.WriteLine(question.problem.lexeme);
+            }
+        }
+
+        public void AddToBank(Token name, List<Question> questions)
+        {
+            if (!(banks.ContainsKey(name.lexeme)))
+            {
+                Console.WriteLine("Bank " + name.lexeme + " does not exist.");
+                return;
+            }
+            banks[name.lexeme].AddRange(questions);
+            Console.WriteLine("Bank " + name.lexeme + ":");
+            foreach (Question question in banks[name.lexeme])
+            {
+                Console.WriteLine(question.problem.lexeme);
+            }
         }
 
         public void DefineTest(string name, List<Token> bankList)
@@ -42,7 +62,7 @@ namespace quick_interpreter
             foreach (Token bank in bankList)
             {
                 if (banks.ContainsKey(bank.lexeme)){
-                    questions.Concat(banks[bank.lexeme]);
+                    questions.AddRange(banks[bank.lexeme]);
                 }
                 else
                 {

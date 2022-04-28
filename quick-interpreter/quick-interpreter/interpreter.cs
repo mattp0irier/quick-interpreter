@@ -20,8 +20,51 @@ namespace quick_interpreter
 
         public object? visitTestStatement(TestStmt stmt)
         {
-            
+            Console.WriteLine("not yet implemented.");
             return null;
+        }
+
+        public object? visitBankStatement(BankStmt stmt)
+        {
+            global.DefineBank(stmt.name, stmt.questions);
+            return null;
+        }
+
+        public object? visitQuestionStatement(QuestionStmt stmt)
+        {
+            global.AddToBank(stmt.bank, stmt.questions);
+            return null;
+        }
+
+        public object? visitPrintStatement(PrintStmt stmt)
+        {
+            Console.WriteLine("not yet implemented.");
+            return null;
+        }
+
+        public object? visitDeleteStatement(DeleteStmt stmt)
+        {
+            Console.WriteLine("not yet implemented.");
+            return null;
+        }
+
+        public object? visitSetStatement(SetStmt stmt)
+        {
+            Console.WriteLine("not yet implemented.");
+            return null;
+        }
+
+        public object? Execute(Statement stmt)
+        {
+            return stmt.accept(this);
+        }
+
+        public void interpret(List<Statement> statements)
+        {
+            foreach (Statement statement in statements)
+            {
+                Execute(statement);
+            }
         }
     }
 }
