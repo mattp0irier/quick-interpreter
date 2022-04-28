@@ -50,7 +50,7 @@ namespace quick_interpreter
             }
             else
             {
-                Console.WriteLine("question not found in test bank " + name.lexeme);
+                Console.WriteLine("question not found in bank " + name.lexeme);
             }
 
         }
