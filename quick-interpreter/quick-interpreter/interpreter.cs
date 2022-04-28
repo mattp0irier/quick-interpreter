@@ -15,12 +15,13 @@ namespace quick_interpreter
         {
             // this is where formatting is a big deal
             // make a pretty file out of the test
+            Console.WriteLine("FIXME: Implement GenerateStatement");
             return null;
         }
 
         public object? visitTestStatement(TestStmt stmt)
         {
-            Console.WriteLine("not yet implemented.");
+            global.DefineTest(stmt.name, stmt.banks);
             return null;
         }
 
@@ -38,19 +39,19 @@ namespace quick_interpreter
 
         public object? visitPrintStatement(PrintStmt stmt)
         {
-            Console.WriteLine("not yet implemented.");
+            print(stmt.itemToPrint);
             return null;
         }
 
         public object? visitDeleteStatement(DeleteStmt stmt)
         {
-            Console.WriteLine("not yet implemented.");
+            global.DeleteQuestion(stmt.bank, stmt.index);
             return null;
         }
 
         public object? visitSetStatement(SetStmt stmt)
         {
-            Console.WriteLine("not yet implemented.");
+            global.updateAnswer(stmt.bank, stmt.index, stmt.answer);
             return null;
         }
 
@@ -65,6 +66,63 @@ namespace quick_interpreter
             {
                 Execute(statement);
             }
+        }
+        public void print(Token name)
+        {
+            List<Question>? questions = global.GetTest(name);
+            if (questions == null)
+            {
+                questions = global.GetBank(name);
+                if (questions == null)
+                {
+                    Console.WriteLine("No test or bank with name " + name.lexeme + " exists.");
+                    return;
+                }
+                else
+                {
+                    printBank(name, questions);
+                }
+            }
+            else
+            {
+                printTest(name, questions);
+            }
+        }
+
+        public void printBank(Token name, List<Question> questions)
+        {
+            // FIXME: Bad Formatting
+            Console.WriteLine("Question Bank: " + name.lexeme);
+            for (int i = 0; i < questions.Count; i++)
+            {
+                Console.WriteLine("Question " + (i+1).ToString() + ": " + questions[i].problem.lexeme);
+                switch (questions[i].type.type)
+                {
+                    case TokenType.MC:
+                        char option = 'A';
+                        for (int j = 0; j < questions[i].options.Count; j++)
+                        {
+                            Console.WriteLine(Char.ToString((char)(option + j)) +
+                                ": " + questions[i].options[j].lexeme);
+                        }
+                        Console.WriteLine("Correct Answer: " + Char.ToString((char)(option + int.Parse(questions[i].solution.lexeme) - 1)));
+                        break;
+                    case TokenType.TF:
+                        Console.WriteLine("TF");
+                        break;
+                    case TokenType.SA:
+                        Console.WriteLine("SA");
+                        break;
+                    case TokenType.FR:
+                        Console.WriteLine("FR");
+                        break;
+                }
+            }
+        }
+
+        public void printTest(Token name, List<Question> questions)
+        {
+            Console.WriteLine("printTest not done yet.");
         }
     }
 }

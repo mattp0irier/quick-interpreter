@@ -1,0 +1,40 @@
+﻿/ TESTING FUNCTIONS
+
+/ DEFINE TWO QUESTION BANKS
+
+bank Bank1 {
+	mc "This is a multiple choice question."
+		"This is incorrect." "This is incorrect." "This is incorrect." "This is correct." 4,
+	tf "This is a True/False question; the answer is False" T,
+	sa "This is a short answer question. You have a set amount of space for your response.",
+	fr "This is a free response quesiton. You have 12 lines of space for your response." 12
+};
+
+bank Bank2;
+
+/ NOTICED AN ERROR IN QUESTION 2 OF BANK1, UPDATING ANSWER
+
+set_ans Bank1[2] F;
+
+/ ADD QUESTIONS TO BANK2
+
+question Bank2 {
+	mc "This is a different multiple choice question. This question only has 3 options."
+		"This is correct." "This is incorrect." "This is incorrect." 1,
+	tf "This is another True/False question; the answer is True." T
+};
+
+/ DELETE THE SHORT ANSWER QUESTION FROM BANK1
+
+print Bank1;
+delete Bank1[3];
+print Bank1;
+
+/ CREATE TWO TESTS
+
+test Test1 {Bank1, Bank2};
+test Test2 Bank2;
+
+/ GENERATE EXAM FILES
+generate Test2;
+generate Test1 shuffle;

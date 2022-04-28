@@ -187,6 +187,10 @@ namespace quick_interpreter
         void addToken(TokenType type, object literal)
         {
             string text = source[start..cur];
+            if (type == TokenType.STRING)
+            {
+                text = source[(start + 1)..(cur - 1)];
+            }
             tokens.Add(new Token(type, text, literal, line));
         }
 

@@ -44,7 +44,7 @@ namespace quick_interpreter
         static void RunFile(string filename)
         {
             string input = File.ReadAllText(filename);
-            //Run(input, null);
+            Run(input, null);
             //Run(input);
 
             // exit if errors
@@ -53,8 +53,7 @@ namespace quick_interpreter
         }
 
         // Run: execute string input
-       // static void Run(string line, Interpreter? interpreter)
-        static void Run(string line, Interpreter interpreter)
+        static void Run(string line, Interpreter? interpreter)
         {
             // Scan
             Scanner scanner = new(line);
@@ -64,7 +63,7 @@ namespace quick_interpreter
             Parser parser = new(tokens);
             List<Statement> stmts = parser.Parse();
 
-           // if (interpreter == null) interpreter = new Interpreter();
+            if (interpreter == null) interpreter = new Interpreter();
 
             // Resolve
            // Resolver resolver = new Resolver(interpreter);

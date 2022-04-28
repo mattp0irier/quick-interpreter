@@ -132,6 +132,7 @@ namespace quick_interpreter
         Statement PrintStmt()
         {
             Token itemToPrint = Consume(TokenType.IDENTIFIER, "Invalid identifier");
+            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon.");
             return new PrintStmt(itemToPrint);
         }
 
@@ -142,6 +143,8 @@ namespace quick_interpreter
 
             int index = int.Parse(Consume(TokenType.NUMBER, "Expect index").lexeme);
             Consume(TokenType.RIGHT_BRACKET, "Expect right bracket.");
+
+            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon.");
 
             return new DeleteStmt(name, index);
         }
@@ -159,6 +162,7 @@ namespace quick_interpreter
             {
                 answer = Previous();
             }
+            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon.");
 
             return new SetStmt(name, index, answer);
         }

@@ -17,7 +17,7 @@ namespace quick_interpreter
             {
                 return banks[name.lexeme];
             }
-            Console.WriteLine("Undefined bank: " + name.lexeme);
+           //Console.WriteLine("Undefined bank: " + name.lexeme);
             return null;
         }
 
@@ -27,18 +27,21 @@ namespace quick_interpreter
             {
                 return tests[name.lexeme];
             }
-            Console.WriteLine("Undefined test: " + name.lexeme);
+            //Console.WriteLine("Undefined test: " + name.lexeme);
             return null;
         }
 
         public void DefineBank(Token name, List<Question> questions)
         {
             banks.Add(name.lexeme, questions);
+
+            /*debugging: output contents of question bank
             Console.WriteLine("Bank " + name.lexeme + ":");
             foreach (Question question in banks[name.lexeme])
             {
                 Console.WriteLine(question.problem.lexeme);
             }
+            */
         }
 
         public void AddToBank(Token name, List<Question> questions)
@@ -49,14 +52,17 @@ namespace quick_interpreter
                 return;
             }
             banks[name.lexeme].AddRange(questions);
+
+            /* debugging: output updated bank
             Console.WriteLine("Bank " + name.lexeme + ":");
             foreach (Question question in banks[name.lexeme])
             {
                 Console.WriteLine(question.problem.lexeme);
             }
+            */
         }
 
-        public void DefineTest(string name, List<Token> bankList)
+        public void DefineTest(Token name, List<Token> bankList)
         {
             List<Question> questions = new();
             foreach (Token bank in bankList)
@@ -69,15 +75,20 @@ namespace quick_interpreter
                     Console.WriteLine("Could not add bank " + bank.lexeme + "to this test.");
                 }
             }
-            tests.Add(name, questions);
+            tests.Add(name.lexeme, questions);
         }
 
         public void DeleteQuestion(Token name, int index)
         {
             List<Question>? questions = GetBank(name);
-            if(questions != null && index < questions.Count)
+            if (questions == null)
             {
-                questions.RemoveAt(index);
+                Console.WriteLine("Bank " + name.lexeme + " does not exist.");
+                return;
+            }
+            if(index <= questions.Count)
+            {
+                banks[name.lexeme].RemoveAt(index-1);
             }
             else
             {
@@ -86,22 +97,25 @@ namespace quick_interpreter
 
         }
 
-        public void updateAnswer(string name, int index, Token answer)
+        public void updateAnswer(Token name, int index, Token answer)
         {
-            if (tests.ContainsKey(name))
+            index = index - 1; // start numbering at 1
+            List<Question>? questions = GetBank(name);
+            if (questions == null)
             {
-                if (index >= 0 && index < banks[name].Count)
+                Console.WriteLine("Bank " + name.lexeme + " does not exist.");
+                return;
+            }
+            else
+            {
+                if (index >= 0 && index < banks[name.lexeme].Count)
                 {
-                    banks[name][index].solution = answer;
+                    banks[name.lexeme][index].solution = answer;
                 }
                 else
                 {
                     Console.WriteLine("Test bank " + name + "has no question at index " + index);
                 }
-            }
-            else
-            {
-                Console.WriteLine("Undefined bank: " + name);
             }
         }
     }
