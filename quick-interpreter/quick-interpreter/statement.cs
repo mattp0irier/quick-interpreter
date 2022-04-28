@@ -91,11 +91,11 @@ namespace quick_interpreter
     public class PrintStmt : Statement
     {
         // characteristics?
-        readonly string msg;
+        public readonly Token itemToPrint;
 
-        public PrintStmt(string msg)
+        public PrintStmt(Token itemToPrint)
         {
-            this.msg = msg;
+            this.itemToPrint = itemToPrint;
         }   
 
         public override T accept<T>(Visitor<T> visitor)

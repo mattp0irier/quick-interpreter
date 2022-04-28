@@ -34,7 +34,7 @@ namespace quick_interpreter
             if (Match(TokenType.DELETE)) return DeleteStmt();
             if (Match(TokenType.SET_ANS)) return SetStmt();
             quick.Error(cur, "Please start a valid statement.");
-            return new PrintStmt("");
+            return null;
         }
 
         Statement GenerateStmt()
@@ -96,7 +96,8 @@ namespace quick_interpreter
 
         Statement PrintStmt()
         {
-            return new PrintStmt("");
+            Token itemToPrint = Consume(TokenType.IDENTIFIER, "Invalid identifier");
+            return new PrintStmt(itemToPrint);
         }
 
         Statement ShuffleStmt()
