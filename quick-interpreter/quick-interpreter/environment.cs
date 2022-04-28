@@ -52,6 +52,20 @@ namespace quick_interpreter
             tests.Add(name, questions);
         }
 
+        public void DeleteQuestion(Token name, int index)
+        {
+            List<Question>? questions = GetBank(name);
+            if(questions != null && index < questions.Count)
+            {
+                questions.RemoveAt(index);
+            }
+            else
+            {
+                Console.WriteLine("question not found in bank " + name.lexeme);
+            }
+
+        }
+
         public void updateAnswer(string name, int index, Token answer)
         {
             if (tests.ContainsKey(name))
