@@ -30,7 +30,6 @@ namespace quick_interpreter
             if (Match(TokenType.GENERATE)) return GenerateStmt();
             if (Match(TokenType.TEST)) return TestStmt();
             if (Match(TokenType.QUESTION)) return QuestionStmt();
-            if (Match(TokenType.SHUFFLE)) return ShuffleStmt();
             if (Match(TokenType.DELETE)) return DeleteStmt();
             if (Match(TokenType.SET_ANS)) return SetStmt();
             quick.Error(cur, "Please start a valid statement.");
@@ -39,12 +38,48 @@ namespace quick_interpreter
 
         Statement GenerateStmt()
         {
-            return new GenerateStmt();
+            Token name = Consume(TokenType.IDENTIFIER, "Expect test name.");
+            int quantity = 1;
+            if (Check(TokenType.NUMBER))
+            {
+                quantity = int.Parse(Advance().lexeme);
+                Advance();
+            }
+            if (Check(TokenType.SHUFFLE))
+            {
+                Advance();
+                Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon.");
+                return new GenerateStmt(name, quantity, true);
+            }
+            else
+            {
+                Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon.");
+                return new GenerateStmt(name, quantity, false);
+            }
         }
 
         Statement TestStmt()
         {
-            return new TestStmt();
+            Token name = Consume(TokenType.IDENTIFIER, "Expect test name.");
+
+            List<Token> banks = new();
+            if (Match(TokenType.LEFT_BRACE))
+            {
+                while (Check(TokenType.IDENTIFIER))
+                {
+                    banks.Add(Advance());
+                    if (Match(TokenType.RIGHT_BRACE)) break;
+                    Consume(TokenType.COMMA, "Bank names are separated by a comma.");
+                }
+            }
+            else
+            {
+                banks.Add(Consume(TokenType.IDENTIFIER, "Test must include at least one question bank."));
+            }
+            Consume(TokenType.SEMICOLON, "Test delcaration must end with semicolon.");
+
+
+            return new TestStmt(name, banks);
         }
 
         Statement BankStmt()
@@ -79,7 +114,7 @@ namespace quick_interpreter
                 while (!(Peek().GetType() == TokenType.RIGHT_BRACE))
                 {
                     questions.Add(ParseQuestion());
-                    if (Peek().GetType() == TokenType.RIGHT_BRACE) break;
+                    if (Check(TokenType.RIGHT_BRACE)) break;
                     Consume(TokenType.COMMA, "Questions must be separated by a comma");
                 }
                 Consume(TokenType.RIGHT_BRACE, "Question block must end with }");
@@ -251,7 +286,7 @@ namespace quick_interpreter
         public readonly Token type;
         public readonly Token problem;
         public readonly List<Token> options;
-        public readonly Token solution;
+        public Token solution;
 
         public Question()
         {

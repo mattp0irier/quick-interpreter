@@ -15,7 +15,6 @@ namespace quick_interpreter
             T visitBankStatement(BankStmt stmt);
             T visitQuestionStatement(QuestionStmt stmt);
             T visitPrintStatement(PrintStmt stmt);
-            T visitShuffleStatement(ShuffleStmt stmt);
             T visitDeleteStatement(DeleteStmt stmt);
             T visitSetStatement(SetStmt stmt);
         }
@@ -34,6 +33,13 @@ namespace quick_interpreter
         public readonly int quantity;
         public readonly bool shuffle;
 
+        public GenerateStmt(Token testName, int quantity, bool shuffle)
+        {
+            this.testName = testName;
+            this.quantity = quantity;
+            this.shuffle = shuffle;
+        }
+
         public override T accept<T>(Visitor<T> visitor)
         {
             return visitor.visitGenerateStatement(this);
@@ -44,7 +50,13 @@ namespace quick_interpreter
     {
         // characteristics?
         public readonly Token name;
-        public readonly List<Question> questions;
+        public readonly List<Token> banks;
+
+        public TestStmt(Token name, List<Token> banks)
+        {
+            this.name = name;
+            this.banks = banks;
+        }
 
         public override T accept<T>(Visitor<T> visitor)
         {
