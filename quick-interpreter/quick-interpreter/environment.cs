@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace quick_interpreter
 {
-    public class environment
+    public class Environment
     {
         public readonly Dictionary<string, List<Question>> banks = new();
         public readonly Dictionary<string, List<Question>> tests = new();
@@ -36,8 +36,19 @@ namespace quick_interpreter
             banks.Add(name, questions);
         }
 
-        public void DefineTest(string name, List<Question> questions)
+        public void DefineTest(string name, List<Token> bankList)
         {
+            List<Question> questions = new();
+            foreach (Token bank in bankList)
+            {
+                if (banks.ContainsKey(bank.lexeme)){
+                    questions.Concat(banks[bank.lexeme]);
+                }
+                else
+                {
+                    Console.WriteLine("Could not add bank " + bank.lexeme + "to this test.");
+                }
+            }
             tests.Add(name, questions);
         }
 
