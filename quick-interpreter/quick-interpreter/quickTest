@@ -5,7 +5,7 @@
 bank Bank1 {
 	mc "This is a multiple choice question."
 		"This is incorrect." "This is incorrect." "This is incorrect." "This is correct." 4,
-	tf "This is a True/False question; the answer is False" T,
+	tf "This is a True/False question; the answer is False." T,
 	sa "This is a short answer question. You have a set amount of space for your response.",
 	fr "This is a free response quesiton. You have 12 lines of space for your response." 12
 };
@@ -30,10 +30,14 @@ print Bank1;
 delete Bank1[3];
 print Bank1;
 
+/ print Bank2;
+
 / CREATE TWO TESTS
 
 test Test1 {Bank1, Bank2};
 test Test2 Bank2;
+
+print Test1;
 
 / GENERATE EXAM FILES
 generate Test2;

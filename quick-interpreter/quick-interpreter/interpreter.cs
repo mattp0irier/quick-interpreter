@@ -108,13 +108,18 @@ namespace quick_interpreter
                         Console.WriteLine("Correct Answer: " + Char.ToString((char)(option + int.Parse(questions[i].solution.lexeme) - 1)));
                         break;
                     case TokenType.TF:
-                        Console.WriteLine("TF");
+                        Console.WriteLine("A: True\nB: False");
+                        string answer = questions[i].solution.lexeme;
+                        Console.WriteLine("Correct Answer: " + 
+                            ((answer == "t" || answer == "T") ? "A" : "B"));
                         break;
                     case TokenType.SA:
-                        Console.WriteLine("SA");
+                        Console.WriteLine("\n");
                         break;
                     case TokenType.FR:
-                        Console.WriteLine("FR");
+                        for (int j=0; j < int.Parse(questions[i].solution.lexeme); j++){
+                            Console.WriteLine();
+                        }
                         break;
                 }
             }
@@ -122,7 +127,38 @@ namespace quick_interpreter
 
         public void printTest(Token name, List<Question> questions)
         {
-            Console.WriteLine("printTest not done yet.");
+            Console.WriteLine("Test: " + name.lexeme);
+            for (int i = 0; i < questions.Count; i++)
+            {
+                Console.WriteLine("Question " + (i + 1).ToString() + ": " + questions[i].problem.lexeme);
+                switch (questions[i].type.type)
+                {
+                    case TokenType.MC:
+                        char option = 'A';
+                        for (int j = 0; j < questions[i].options.Count; j++)
+                        {
+                            Console.WriteLine(Char.ToString((char)(option + j)) +
+                                ": " + questions[i].options[j].lexeme);
+                        }
+                        Console.WriteLine("Correct Answer: " + Char.ToString((char)(option + int.Parse(questions[i].solution.lexeme) - 1)));
+                        break;
+                    case TokenType.TF:
+                        Console.WriteLine("A: True\nB: False");
+                        string answer = questions[i].solution.lexeme;
+                        Console.WriteLine("Correct Answer: " +
+                            ((answer == "t" || answer == "T") ? "A" : "B"));
+                        break;
+                    case TokenType.SA:
+                        Console.WriteLine("\n");
+                        break;
+                    case TokenType.FR:
+                        for (int j = 0; j < int.Parse(questions[i].solution.lexeme); j++)
+                        {
+                            Console.WriteLine();
+                        }
+                        break;
+                }
+            }
         }
     }
 }
