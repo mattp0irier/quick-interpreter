@@ -66,8 +66,8 @@ namespace quick_interpreter
             if (interpreter == null) interpreter = new Interpreter();
 
             // Resolve
-           // Resolver resolver = new Resolver(interpreter);
-           // resolver.Resolve(stmts);
+            // Resolver resolver = new Resolver(interpreter);
+            // resolver.Resolve(stmts);
 
             //if (hadError) return; // if error, break
 

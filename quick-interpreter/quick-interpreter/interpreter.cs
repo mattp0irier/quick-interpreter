@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using DW.RtfWriter;
 
 namespace quick_interpreter
 {
@@ -15,6 +17,7 @@ namespace quick_interpreter
         {
             // this is where formatting is a big deal
             // make a pretty file out of the test
+            generateRTF(stmt.testName.lexeme, global.GetTest(stmt.testName), stmt.quantity);
             return null;
         }
 
@@ -157,6 +160,69 @@ namespace quick_interpreter
                         }
                         break;
                 }
+            }
+        }
+
+        public void generateRTF(string testName, List<Question>? questions, int quantity)
+        {
+            for(int testNumber = 1; testNumber <= quantity; testNumber++)
+            {
+                var doc = new RtfDocument(PaperSize.Letter, PaperOrientation.Portrait, Lcid.English);
+
+                // margins
+                doc.Margins[Direction.Left] = 50;
+                doc.Margins[Direction.Top] = 50;
+                doc.Margins[Direction.Bottom] = 50;
+                doc.Margins[Direction.Right] = 50;
+                RtfParagraph par;
+                par = doc.addParagraph();
+                par.DefaultCharFormat.Font = doc.createFont("Times New Roman");
+
+                // loop through questions
+                if (questions == null) return;
+                for (int i = 0; i < questions.Count; i++)
+                {
+                    par = doc.addParagraph();
+                    par.setText((i + 1) + ".\t" + questions[i].problem.lexeme);
+                    for (int j = 0; j < questions[i].options.Count; j++)
+                    {
+                        par = doc.addParagraph();
+                        par.LineSpacing = 15;
+                        par.setText("\t" + (char)(j + 65) + ".\t" + questions[i].options[j].lexeme); // letter for answer
+                    }
+
+                    // space for short answer
+                    if (questions[i].type.type == TokenType.SA)
+                    {
+                        par = doc.addParagraph();
+                        par = doc.addParagraph();
+                        par = doc.addParagraph();
+                    }
+
+                    // lines for free response
+                    if (questions[i].type.type == TokenType.FR)
+                    {
+                        par = doc.addParagraph();
+                        for (int k = 0; k < int.Parse(questions[i].solution.lexeme); k++)
+                        {
+                            par = doc.addParagraph();
+                            par.LineSpacing = 25;
+                            par.setText("\t___________________________________________________________________________");
+                        }
+                        par = doc.addParagraph();
+                    }
+
+                    par = doc.addParagraph();
+                    par.setText("");
+                }
+
+                // header
+                par = doc.Header.addParagraph();
+                par.addControlWord(1, RtfFieldControlWord.FieldType.Page);
+                par.Alignment = Align.Right;
+                par.DefaultCharFormat.FontSize = 12;
+
+                doc.save(testName + "-" + testNumber + ".rtf");
             }
         }
     }
