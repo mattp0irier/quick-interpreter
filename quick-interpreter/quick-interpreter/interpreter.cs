@@ -17,7 +17,7 @@ namespace quick_interpreter
         {
             // this is where formatting is a big deal
             // make a pretty file out of the test
-            generateRTF(stmt.testName.lexeme, global.GetTest(stmt.testName), stmt.quantity);
+            generateRTF(stmt.title.lexeme, global.GetTest(stmt.testName), stmt.quantity);
             return null;
         }
 
@@ -173,6 +173,7 @@ namespace quick_interpreter
                     var doc = new RtfDocument(PaperSize.Letter, PaperOrientation.Portrait, Lcid.English);
                     RtfParagraph par;
                     RtfCharFormat fmt;
+                    int lineCounter = 0;
 
                     // margins
                     doc.Margins[Direction.Left] = 50;
@@ -190,6 +191,7 @@ namespace quick_interpreter
                     par.DefaultCharFormat.FontSize = 15;
                     fmt = par.addCharFormat();
                     fmt.FontStyle.addStyle(FontStyleFlag.Bold);
+                    lineCounter += 3;
 
                     // loop through questions
                     if (questions == null) return;
@@ -197,15 +199,24 @@ namespace quick_interpreter
                     {
                         par = doc.addParagraph();
                         par = doc.addParagraph();
+                        lineCounter += 2;
+                        if (lineCounter >= 50)
+                        {
+                            par = doc.addParagraph();
+                            par = doc.addParagraph();
+                            lineCounter = 0;
+                        }
+
                         par.setText((i + 1) + ".\t" + questions[i].problem.lexeme);
                         for (int j = 0; j < questions[i].options.Count; j++)
                         {
                             par = doc.addParagraph();
                             par.LineSpacing = 15;
                             par.setText("\t" + (char)(j + 65) + ".\t" + questions[i].options[j].lexeme); // letter for answer
+                            lineCounter += 1;
 
                             // bold answer
-                            if(isKey == 1 && (questions[i].type.type == TokenType.MC && (j + 1 == int.Parse(questions[i].solution.lexeme))) || questions[i].type.type == TokenType.TF && questions[i].options[j].type == questions[i].solution.type)
+                            if(isKey == 1 && (questions[i].type.type == TokenType.MC && ((j + 1 == int.Parse(questions[i].solution.lexeme))) || questions[i].type.type == TokenType.TF && questions[i].options[j].type == questions[i].solution.type))
                             {
                                 fmt = par.addCharFormat();
                                 fmt.FontStyle.addStyle(FontStyleFlag.Bold);
@@ -218,17 +229,20 @@ namespace quick_interpreter
                             par = doc.addParagraph();
                             par = doc.addParagraph();
                             par = doc.addParagraph();
+                            lineCounter += 3;
                         }
 
                         // lines for free response
                         if (questions[i].type.type == TokenType.FR)
                         {
                             par = doc.addParagraph();
+                            lineCounter += 1;
                             for (int k = 0; k < int.Parse(questions[i].solution.lexeme); k++)
                             {
                                 par = doc.addParagraph();
                                 par.LineSpacing = 12;
                                 par.setText("\t____________________________________________________________________________");
+                                lineCounter += 2;
                             }
                         }
                     }
