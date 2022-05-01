@@ -40,5 +40,5 @@ test Test2 Bank2;
 print Test1;
 
 / GENERATE EXAM FILES
-generate Test2;
-generate Test1 shuffle;
+generate Test2 "Example Exam: Test 2";
+generate Test1 "Example Exam: Test 1" shuffle;

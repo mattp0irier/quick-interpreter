@@ -17,7 +17,7 @@ namespace quick_interpreter
         {
             // this is where formatting is a big deal
             // make a pretty file out of the test
-            generateRTF(stmt.testName.lexeme, global.GetTest(stmt.testName), stmt.quantity);
+            generateRTF(stmt.testName.lexeme, stmt.title.lexeme, global.GetTest(stmt.testName), stmt.quantity);
             return null;
         }
 
@@ -163,7 +163,7 @@ namespace quick_interpreter
             }
         }
 
-        public void generateRTF(string testName, List<Question>? questions, int quantity)
+        public void generateRTF(string testName, string testTitle, List<Question>? questions, int quantity)
         {
             for(int testNumber = 1; testNumber <= quantity; testNumber++)
             {
@@ -174,6 +174,9 @@ namespace quick_interpreter
                 doc.Margins[Direction.Top] = 50;
                 doc.Margins[Direction.Bottom] = 50;
                 doc.Margins[Direction.Right] = 50;
+                RtfParagraph header = doc.addParagraph();
+                header.Alignment = Align.Center;
+                header.setText(testTitle);
                 RtfParagraph par;
                 par = doc.addParagraph();
                 par.DefaultCharFormat.Font = doc.createFont("Times New Roman");
@@ -183,6 +186,7 @@ namespace quick_interpreter
                 for (int i = 0; i < questions.Count; i++)
                 {
                     par = doc.addParagraph();
+                    par.Alignment = Align.Left;
                     par.setText((i + 1) + ".\t" + questions[i].problem.lexeme);
                     for (int j = 0; j < questions[i].options.Count; j++)
                     {
