@@ -22,6 +22,9 @@ question Bank2 {
 	mc "This is a different multiple choice question. This question only has 3 options."
 		"This is correct." "This is incorrect." "This is incorrect." 1,
 	tf "This is another True/False question; the answer is True." T
+	mc "This is a third multiple choice question. This question only has 2 options."
+		"This is correct." "This is incorrect." 1,
+	tf "This is a third True/False question; the answer is False." F
 };
 
 / DELETE THE SHORT ANSWER QUESTION FROM BANK1
