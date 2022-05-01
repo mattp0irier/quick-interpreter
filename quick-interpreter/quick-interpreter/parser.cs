@@ -39,6 +39,7 @@ namespace quick_interpreter
         Statement GenerateStmt()
         {
             Token name = Consume(TokenType.IDENTIFIER, "Expect test name.");
+            Token title = Consume(TokenType.STRING, "Expect test title after test name.");
             int quantity = 1;
             if (Check(TokenType.NUMBER))
             {
@@ -49,12 +50,12 @@ namespace quick_interpreter
             {
                 Advance();
                 Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon.");
-                return new GenerateStmt(name, quantity, true);
+                return new GenerateStmt(name, title, quantity, true);
             }
             else
             {
                 Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon.");
-                return new GenerateStmt(name, quantity, false);
+                return new GenerateStmt(name, title, quantity, false);
             }
         }
 

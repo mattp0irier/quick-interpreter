@@ -15,7 +15,6 @@ namespace quick_interpreter
         {
             // this is where formatting is a big deal
             // make a pretty file out of the test
-            Console.WriteLine("FIXME: Implement GenerateStatement");
             return null;
         }
 

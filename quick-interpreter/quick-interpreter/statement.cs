@@ -30,12 +30,14 @@ namespace quick_interpreter
     {
         // characteristics?
         public readonly Token testName;
+        public readonly Token title;
         public readonly int quantity;
         public readonly bool shuffle;
 
-        public GenerateStmt(Token testName, int quantity, bool shuffle)
+        public GenerateStmt(Token testName, Token title, int quantity, bool shuffle)
         {
             this.testName = testName;
+            this.title = title;
             this.quantity = quantity;
             this.shuffle = shuffle;
         }
