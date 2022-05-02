@@ -86,7 +86,7 @@ bank bank1;
 Banks can also be created with questions at the same time. Each question is separated by a comma.
 ```
 bank Bank1 {
-	tf "This is a True/False question; the answer is False." T,
+	tf "This is a True/False question; the answer is False." F,
 	fr "This is a free response question." 12
 };
 ```
