@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
+// quick.cs: part of Quick by Matt Poirier and Trevor Russell
 
 namespace quick_interpreter
 {
@@ -45,11 +46,7 @@ namespace quick_interpreter
         {
             string input = File.ReadAllText(filename);
             Run(input, null);
-            //Run(input);
-
-            // exit if errors
-           // if (hadError) System.Environment.Exit(65);
-           // if (hadRunTimeError) System.Environment.Exit(70);
+            
         }
 
         // Run: execute string input
@@ -65,11 +62,6 @@ namespace quick_interpreter
 
             if (interpreter == null) interpreter = new Interpreter();
 
-            // Resolve
-            // Resolver resolver = new Resolver(interpreter);
-            // resolver.Resolve(stmts);
-
-            //if (hadError) return; // if error, break
 
             // Interpret
             interpreter.interpret(stmts);
@@ -92,14 +84,7 @@ namespace quick_interpreter
             }
         }
 
-        /*
-        // RuntimeError: write runtime error and line number to error console
-        public static void RuntimeError(runtimeError error)
-        {
-            Console.Error.WriteLine(error.Message + "\n[line: " + error.token.line + "]");
-            hadRunTimeError = true;
-        }
-        */
+
         // Report: write error and line number to error console
         public static void Report(int line, string where, string msg)
         {

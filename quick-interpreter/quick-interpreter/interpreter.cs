@@ -7,6 +7,8 @@ using System.IO;
 using System.Security.Cryptography;
 using DW.RtfWriter;
 
+// Interpreter.cs: part of Quick by Matt Poirier and Trevor Russell
+
 namespace quick_interpreter
 {
     public class Interpreter : Statement.Visitor<object?>
