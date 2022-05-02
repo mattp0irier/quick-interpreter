@@ -19,6 +19,8 @@ In all, we believe these features can simplify the test creation process for edu
 Below is the Quick grammar written in EBNF form as specified by Wikipedia.
 
 ```
+S = GENERATE | BANK | TEST | QUESTION | PRINT | DELETE | SET;
+
 STRING = ? a terminal string with a user-provided value ?;
 NUMBER = ? a terminal integer provided by the user ?;
 
@@ -28,10 +30,12 @@ BANK_NAME = STRING;
 PROBLEM = STRING;
 ANSWER = STRING;
 OTHER_ANSWERS = STRING;
-SOLUTION = NUMBER | 'T' | 'F';
+SOLUTION = NUMBER | TRUE | FALSE;
+TRUE = 'T' | 't';
+FALSE = 'F' | 'f';
 
 NEW_QUESTION = 'mc', PROBLEM, ANSWER, {OTHER_ANSWERS}, NUMBER
-	     |'tf', PROBLEM, 'T' | 'tf', PROBLEM, 'F'
+	     |'tf', PROBLEM, TRUE | 'tf', PROBLEM, FALSE
              |'sa', PROBLEM
              |'fr', PROBLEM, NUMBER;
 
@@ -82,7 +86,7 @@ You would be hard pressed to find a test without any questions. Thankfully, ques
 
 There are four types of question: multiple choice, true/false, short answer, and free response. Declaring a question into a bank appends it to the end of that bank's question list.
 
-Multiple choice questions consist of a prompt and at least one answer option. The correct answer is set by a number at the end of the question indicating which choice is correct (this value starts at 1).
+Multiple choice questions consist of a prompt and at least one answer option. The correct answer is set by a number at the end of the question indicating which choice is correct (this value starts at 1 instead of 0 for simplicity for non-technical users).
 ```
 question bank1 mc "This is the question text" "1st answer" "2nd answer" "3rd answer" "4th answer" 4;
 question bank1 mc "This question only has 2 answers" "The correct one" "The incorrect one" 1;
@@ -104,7 +108,7 @@ Free response questions ask for the question and the number of lines to provide 
 question bank1 fr "This is a free response question" 12;
 ```
 
-Questions of various types can be generated in bulk using the following syntax:
+Questions of various types can be created in bulk using the following syntax:
 ```
 question Bank1 {
 	tf "This is a True/False question; the answer is False." F,
@@ -122,7 +126,7 @@ test test2 Bank2;
 ##### Generation
 Once a test is created, it can be outputted using the `generate` command. A plaintext name to be displayed as the header of the output file, the number of versions of the test to generate, and if the question order should be shuffled is specified as flags for the command.
 
-In an effort to improve readability, Quick will avoid splitting a question between two pages. Quick assumes 12-point, single spaced font, making for 50 lines per page. Quick automatically moves a question to the top of the next page if there is not enough space left on the current page.
+In an effort to improve readability, Quick will avoid splitting a question between two pages. Quick assumes 12-point, single-spaced font, making for 50 lines per page. Quick automatically moves a question to the top of the next page if there is not enough space left on the current page.
 
 ```
 generate test2 "Example Exam: Test 2";
@@ -164,7 +168,7 @@ Various tests were run on the interpreter in order to verify that Quick could ge
 - `fullTest`: demonstrates all capabilities of Quick, including all ways to create a bank, add questions, delete questions, change an answer, and generate one or multiple test files.
 - `cs300midterm2`: includes a selection of questions from an exam given to us last year; this test highlights the shuffle feature, as it generates 10 permutations of our question bank.
 
-The outputs of our tests are stored in the `output` folder with the `.rtf` extension.
+The outputs of our tests are stored in the `output` folder with the `.rtf` extension. If multiple versions of one test are being generated, a subfolder with the test name will be created and all versions will be stored in that folder
 
 **NOTE:** We opened our tests in Microsoft Word. Different editors render RTF files differently, so it is difficult to ensure correct formatting for all RTF editors. Outputting tests in a more consistent file format (such as PDF) would prevent this issue (see Future Improvements).
 
