@@ -16,7 +16,7 @@ In all, we believe these features can simplify the test creation process for edu
 ---
 
 ### Grammar
-Below is a grammar written in EBNF form as specified by Wikipedia. It can also be found in the `grammar.txt` file located in the source folder.
+Below is a grammar written in EBNF form as specified by Wikipedia.
 
 ```
 STRING = ? a terminal string with a user-provided value ?;
