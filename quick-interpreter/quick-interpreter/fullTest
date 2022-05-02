@@ -48,6 +48,6 @@ bank free_responses {
 	fr "What is the meaning of life?" 10
 };
 
-test QuickDemo {section1, section2, section3, free_responses};
-generate QuickDemo "Quick Demonstration";
-generate QuickDemo "Quick Demonstration" 2 shuffle;
+test FullDemo {section1, section2, section3, free_responses};
+generate FullDemo "Full Demonstration";
+generate FullDemo "Full Demonstration" 2 shuffle;
