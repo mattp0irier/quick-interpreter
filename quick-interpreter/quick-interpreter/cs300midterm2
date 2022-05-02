@@ -1,0 +1,30 @@
+bank shortAnswer {
+	sa "What does reentrant mean as it relates to code?",
+	sa "Name the type of allocated memory that is implicitly managed by the compiler.",
+	sa "Name the type of allocated memory that is explicitly handled by the programmer.",
+	sa "Name 2 fields in the page table that are used to improve efficiency.",
+	sa "What is spatial locality?",
+	sa "If 12 bits of the logical address are reserved for the offset, what is the page size in whole numbers?"
+};
+
+bank trueFalse {
+	tf "System libraries are only available via shared segments." F,
+	tf "The symbol table stores the size of each dynamically allocated segment." T,
+	tf "The working set algorithm allocates a variable amount of physical memory to a process." T,
+	tf "Multilevel page tables reduce the amount of memory needed to store the page table." T,
+	tf "Small improvements in the page fault rate provide an insignificant performance gain." F,
+	tf "Local page replacement keeps the number of frames assigned to a process constant." T,
+	tf "The TLB relies upon locality to improve hit rate." T
+};
+
+bank multipleChoice {
+	mc "Which is more difficult in an inverted page table than in a hierarchical page table?"
+	"Finding space for page tables for additional processes" "Sharing read only code" "Moving process memory from one physical page to a different physical page"
+	2,
+	mc "Which strategy tends to preserve large holes?" "Next-fit" "Best-fit" "Worst-fit" 2
+};
+
+question shortAnswer fr "This is a long free response to test spacing. Good luck" 12;
+
+test midterm2 {shortAnswer, trueFalse, multipleChoice};
+generate midterm2 "CS 300 Fall 2021 Midterm 2 Shuffled" 10 shuffle;

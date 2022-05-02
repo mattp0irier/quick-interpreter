@@ -7,7 +7,7 @@ bank Bank1 {
 		"This is incorrect." "This is incorrect." "This is incorrect." "This is correct." 4,
 	tf "This is a True/False question; the answer is False." T,
 	sa "This is a short answer question. You have a set amount of space for your response.",
-	fr "This is a free response quesiton. You have 12 lines of space for your response." 12
+	fr "This is a free response question. You have 12 lines of space for your response." 12
 };
 
 bank Bank2;
@@ -21,7 +21,7 @@ set_ans Bank1[2] F;
 question Bank2 {
 	mc "This is a different multiple choice question. This question only has 3 options."
 		"This is correct." "This is incorrect." "This is incorrect." 1,
-	tf "This is another True/False question; the answer is True." T
+	tf "This is another True/False question; the answer is True." T,
 	mc "This is a third multiple choice question. This question only has 2 options."
 		"This is correct." "This is incorrect." 1,
 	tf "This is a third True/False question; the answer is False." F
@@ -43,5 +43,4 @@ test Test2 Bank2;
 print Test1;
 
 / GENERATE EXAM FILES
-generate Test2 "Example Exam: Test 2";
-generate Test1 "Example Exam: Test 1" shuffle;
+generate Test1 "Example Exam: Test 1" 3 shuffle;

@@ -44,7 +44,6 @@ namespace quick_interpreter
             if (Check(TokenType.NUMBER))
             {
                 quantity = int.Parse(Advance().lexeme);
-                Advance();
             }
             if (Check(TokenType.SHUFFLE))
             {

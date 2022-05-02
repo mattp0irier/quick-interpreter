@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Security.Cryptography;
 using DW.RtfWriter;
 
 namespace quick_interpreter
@@ -17,7 +18,7 @@ namespace quick_interpreter
         {
             // this is where formatting is a big deal
             // make a pretty file out of the test
-            generateRTF(stmt.title.lexeme, global.GetTest(stmt.testName), stmt.quantity);
+            generateRTF(stmt.testName.lexeme, stmt.title.lexeme, global.GetTest(stmt.testName), stmt.quantity, stmt.shuffle);
             return null;
         }
 
@@ -163,12 +164,56 @@ namespace quick_interpreter
             }
         }
 
-        public void generateRTF(string testName, List<Question>? questions, int quantity)
+        public List<Question>? shuffle(List<Question>? questions)
         {
-            for(int testNumber = 1; testNumber <= quantity; testNumber++)
+            if (questions == null) return null;
+            List<Question> newQuestions = new();
+            List<int> newOrder = randomList(questions.Count);
+
+            foreach (int num in newOrder) {
+                newQuestions.Add(questions[num]);
+            }
+
+            return newQuestions;
+        }
+
+        public List<int> randomList(int upper)
+        {
+            List<int> nums = new();
+            nums.Add(RandomNumberGenerator.GetInt32(0, upper));
+            while (nums.Count != upper)
             {
-                int isKey = 0;
-                while (isKey <= 1)
+                int randomNumber = RandomNumberGenerator.GetInt32(0, upper);
+                if (!(nums.Contains(randomNumber)))
+                {
+                    nums.Add(randomNumber);
+                }
+                else
+                {
+                    int i = 1;
+                    while (nums.Contains((randomNumber+i) % upper))
+                    {
+                        i++;
+                    }
+                    nums.Add((randomNumber + i) % upper);
+                }
+            }
+            return nums;
+        }
+
+        public void generateRTF(string fileName, string testName, List<Question>? questions, int quantity, bool isShuffle)
+        {
+            if (questions == null)
+            {
+                Console.WriteLine("Test contains no questions. No file will be generated.");
+                return;
+            }
+
+            int isKey = 0;
+            for (int testNumber = 1; testNumber <= quantity; testNumber++)
+            { 
+                bool done = false;
+                while (!done)
                 {
                     var doc = new RtfDocument(PaperSize.Letter, PaperOrientation.Portrait, Lcid.English);
                     RtfParagraph par;
@@ -183,37 +228,55 @@ namespace quick_interpreter
 
                     // header
                     par = doc.addParagraph();
+                    par.Alignment = Align.FullyJustify;
                     par.setText("Name: ___________________________________\t\t\tDate: ________________");
                     par = doc.addParagraph();
                     par = doc.addParagraph();
-                    par.setText(testName);
+                    if (quantity != 1)
+                    {
+                        if (isKey == 1) par.setText(testName + " Form " + Char.ToString((char)('A' + testNumber - 1)) + " KEY");
+                        else par.setText(testName + " Form " + Char.ToString((char)('A' + testNumber - 1)));
+                    }
+                    else
+                    {
+                        if (isKey == 1) par.setText(testName + " KEY");
+                        else par.setText(testName);
+                    }
                     par.Alignment = Align.Center;
-                    par.DefaultCharFormat.FontSize = 15;
+                    par.DefaultCharFormat.FontSize = 12;
                     fmt = par.addCharFormat();
                     fmt.FontStyle.addStyle(FontStyleFlag.Bold);
-                    lineCounter += 3;
+                    lineCounter += 2;
+
+                    if ((isKey == 0) && isShuffle) questions = shuffle(questions);
 
                     // loop through questions
-                    if (questions == null) return;
                     for (int i = 0; i < questions.Count; i++)
                     {
-                        par = doc.addParagraph();
-                        par = doc.addParagraph();
-                        lineCounter += 2;
-                        if (lineCounter >= 50)
+                        if (pageOverflow(questions[i], lineCounter + 2) == 0)
                         {
                             par = doc.addParagraph();
                             par = doc.addParagraph();
-                            lineCounter = 0;
+                            lineCounter = (lineCounter + 2) % 48;
                         }
-
+                        else
+                        {
+                            while (lineCounter != 0)
+                            {
+                                par = doc.addParagraph();
+                                lineCounter = (lineCounter + 1) % 48;
+                            }
+                        }
+                        Console.WriteLine("Question " + i + " starts on line " + lineCounter);
+                        par.Alignment = Align.FullyJustify;
                         par.setText((i + 1) + ".\t" + questions[i].problem.lexeme);
                         for (int j = 0; j < questions[i].options.Count; j++)
-                        {
+                        { 
                             par = doc.addParagraph();
                             par.LineSpacing = 15;
+                            par.Alignment = Align.FullyJustify;
                             par.setText("\t" + (char)(j + 65) + ".\t" + questions[i].options[j].lexeme); // letter for answer
-                            lineCounter += 1;
+                            lineCounter = (lineCounter + 1) % 48;
 
                             // bold answer
                             if(isKey == 1 && (questions[i].type.type == TokenType.MC && ((j + 1 == int.Parse(questions[i].solution.lexeme))) || questions[i].type.type == TokenType.TF && questions[i].options[j].type == questions[i].solution.type))
@@ -229,20 +292,20 @@ namespace quick_interpreter
                             par = doc.addParagraph();
                             par = doc.addParagraph();
                             par = doc.addParagraph();
-                            lineCounter += 3;
+                            lineCounter = (lineCounter + 3) % 48;
                         }
 
                         // lines for free response
                         if (questions[i].type.type == TokenType.FR)
                         {
                             par = doc.addParagraph();
-                            lineCounter += 1;
+                            lineCounter = (lineCounter + 1) % 48;
                             for (int k = 0; k < int.Parse(questions[i].solution.lexeme); k++)
                             {
                                 par = doc.addParagraph();
-                                par.LineSpacing = 12;
+                                //par.LineSpacing = 12;
                                 par.setText("\t____________________________________________________________________________");
-                                lineCounter += 2;
+                                lineCounter = (lineCounter + 1) % 48;
                             }
                         }
                     }
@@ -255,14 +318,37 @@ namespace quick_interpreter
 
                     if(isKey == 1)
                     {
-                        doc.save(testName + "-" + testNumber + "-key.rtf");
+                        doc.save(fileName + "-" + Char.ToString((char)('A' + testNumber - 1)) + "-key.rtf");
                     }
                     else
                     {
-                        doc.save(testName + "-" + testNumber + ".rtf");
+                        doc.save(fileName + "-" + Char.ToString((char)('A' + testNumber - 1)) + ".rtf");
                     }
-                    isKey++;
+                    if (isKey == 1)
+                    {
+                        done = true;
+                    }
+                    isKey = (isKey + 1) % 2;
                 }
+            }
+        }
+
+        public int pageOverflow (Question question, int lineCount)
+        {
+           if (question.type.type == TokenType.FR)
+            {
+                if (lineCount + int.Parse(question.solution.lexeme)  < 48) return 0;
+                else return 48 - lineCount;
+            }
+           else if (question.type.type == TokenType.SA)
+            {
+                if (lineCount + 3 < 48) return 0;
+                else return 48 - lineCount;
+            }
+            else
+            {
+                if (lineCount + question.options.Count < 48) return 0;
+                else return 48 - lineCount;
             }
         }
     }

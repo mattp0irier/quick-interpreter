@@ -9,10 +9,10 @@ BANK_NAME = STRING;
 PROBLEM = STRING;
 ANSWER = STRING;
 OTHER_ANSWERS = STRING;
-SOLUTION = NUMBER | 't' | 'f';
+SOLUTION = NUMBER | 'T' | 'F';
 
 NEW_QUESTION = 'mc', PROBLEM, ANSWER, {OTHER_ANSWERS}, NUMBER
-	     |'tf', PROBLEM, 't' | 'tf', PROBLEM, 'f'
+	     |'tf', PROBLEM, 'T' | 'tf', PROBLEM, 'F'
              |'sa', PROBLEM
              |'fr', PROBLEM, NUMBER;
 
