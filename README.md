@@ -121,6 +121,9 @@ test test2 Bank2;
 
 ##### Generation
 Once a test is created, it can be outputted using the `generate` command. A plaintext name to be displayed as the header of the output file, the number of versions of the test to generate, and if the question order should be shuffled is specified as flags for the command.
+
+In an effort to improve readability, Quick will avoid splitting a question between two pages. Quick assumes 12-point, single spaced font, making for 50 lines per page. Quick automatically moves a question to the top of the next page if there is not enough space left on the current page.
+
 ```
 generate test2 "Example Exam: Test 2";
 generate test1 "Example Exam: Test 1" 4 shuffle;
@@ -158,8 +161,10 @@ To run with an input file:
 Various tests were run on the interpreter in order to verify that Quick could generate tests in all of the manners implemented in the language. Included test files are:
 
 - `quickTest`: includes 2 test banks with each type of question, test editing and deleting questions, and generates different forms of the tests
+- `fullTest`: demonstrates all capabilities of Quick, including all ways to create a bank, add questions, delete questions, change an answer, and generate one or multiple test files.
+- `cs300midterm2`: includes a selection of questions from an exam given to us last year; this test highlights the shuffle feature, as it generates 10 permutations of our question bank.
 
-The outputs of our tests are stored in the files with the `.rtf` extension.
+The outputs of our tests are stored in the `output` folder with the `.rtf` extension.
 
 **NOTE:** We opened our tests in Microsoft Word. Different editors render RTF files differently, so it is difficult to ensure correct formatting for all RTF editors. Outputting tests in a more consistent file format (such as PDF) would prevent this issue (see Future Improvements).
 
