@@ -80,7 +80,7 @@ set_ans bank1[2] F;
 ##### Questions
 You would be hard pressed to find a test without any questions. Thankfully, questions are very easy to declare in Quick.
 
-There are four types of question: multiple choice, true/false, short answer, and free response. Declaring a question into a bank appends it to the end of that bank's question list.'
+There are four types of question: multiple choice, true/false, short answer, and free response. Declaring a question into a bank appends it to the end of that bank's question list.
 
 Multiple choice questions consist of a prompt and at least one answer option. The correct answer is set by a number at the end of the question indicating which choice is correct (this value starts at 1).
 ```
