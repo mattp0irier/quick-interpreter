@@ -12,27 +12,31 @@ namespace quick_interpreter
         int start = 0;
         int cur = 0;
         int line = 1;
-        readonly Hashtable keywords = new Hashtable()
-    {
-        {"print", TokenType.PRINT},
-        {"generate", TokenType.GENERATE},
-        {"test", TokenType.TEST},
-        {"bank", TokenType.BANK},
-        {"question", TokenType.QUESTION},
-        {"shuffle", TokenType.SHUFFLE},
-        {"delete", TokenType.DELETE},
-        {"set_ans", TokenType.SET_ANS},
-        {"mc", TokenType.MC},
-        {"tf", TokenType.TF},
-        {"sa", TokenType.SA},
-        {"fr", TokenType.FR},
-    };
 
+        // create hash table of keywords
+        readonly Hashtable keywords = new Hashtable()
+        {
+            {"print", TokenType.PRINT},
+            {"generate", TokenType.GENERATE},
+            {"test", TokenType.TEST},
+            {"bank", TokenType.BANK},
+            {"question", TokenType.QUESTION},
+            {"shuffle", TokenType.SHUFFLE},
+            {"delete", TokenType.DELETE},
+            {"set_ans", TokenType.SET_ANS},
+            {"mc", TokenType.MC},
+            {"tf", TokenType.TF},
+            {"sa", TokenType.SA},
+            {"fr", TokenType.FR},
+        };
+
+        // Scanner: create scanner with source string (the code)
         public Scanner(String source)
         {
             this.source = source;
         }
 
+        // scanTokens: while the file is not at end, scan a token
         public List<Token> scanTokens()
         {
             while (!done())
@@ -45,6 +49,7 @@ namespace quick_interpreter
             return tokens;
         }
 
+        // scanToken: advance token, check character type, and match to correct token type
         void scanToken()
         {
             char c = Advance();
@@ -116,6 +121,7 @@ namespace quick_interpreter
             }
         }
 
+        // ScanIdentifier: match keywords as identifier
         void ScanIdentifier()
         {
             while (Char.IsLetterOrDigit(Peek()) || Peek() == '_') Advance();
@@ -130,6 +136,7 @@ namespace quick_interpreter
             addToken(type);
         }
 
+        // ScanNumber: while there are digits, add them to number, then save as number token
         void ScanNumber()
         {
             while (Char.IsDigit(Peek())) Advance();
@@ -137,6 +144,7 @@ namespace quick_interpreter
             addToken(TokenType.NUMBER, Int32.Parse(source[start..cur]));
         }
 
+        // ScanString: while there are not end quotes or new lines, add to part of string
         void ScanString()
         {
             while (Peek() != '"' && !done())
@@ -155,6 +163,7 @@ namespace quick_interpreter
             addToken(TokenType.STRING, value);
         }
 
+        // match: match a character to a provided value
         bool match(char test)
         {
             if (done()) return false;
@@ -163,27 +172,32 @@ namespace quick_interpreter
             return true;
         }
 
+        // Peek: return current character if file not done
         char Peek()
         {
             if (done()) return '\0';
             return source[cur];
         }
 
+        // PeekNext: return next character
         char PeekNext()
         {
             return source[cur + 1];
         }
 
+        // Advance: return next character and advance cur
         char Advance()
         {
             return source[cur++];
         }
 
+        // addToken: add token of certain TokenType
         void addToken(TokenType type)
         {
             addToken(type, null);
         }
 
+        // addToken: add token of certain TokenType with its literal
         void addToken(TokenType type, object literal)
         {
             string text = source[start..cur];
@@ -194,6 +208,7 @@ namespace quick_interpreter
             tokens.Add(new Token(type, text, literal, line));
         }
 
+        // done: return if file is < the source length
         bool done()
         {
             return cur >= source.Length;

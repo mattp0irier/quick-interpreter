@@ -210,22 +210,22 @@ namespace quick_interpreter
                 Token solution = Advance();
                 if (solution.type != TokenType.T && solution.type != TokenType.F) // match solution as T or F
                 {
-                    Console.WriteLine("Answer to T/F question must be T or F.");
+                    Console.WriteLine("Answer to T/F question must be T or F."); // else error
                 }
                 return new Question(type, problem, options, solution);
             }
-            else if (Check(TokenType.FR))
+            else if (Check(TokenType.FR)) // if free response
             {
-                Token type = Advance();
-                Token problem = Consume(TokenType.STRING, "Expect string for question.");
-                Token solution = Consume(TokenType.NUMBER, "Expect number for size of free response section.");
+                Token type = Advance(); // consume fr
+                Token problem = Consume(TokenType.STRING, "Expect string for question."); // consume question
+                Token solution = Consume(TokenType.NUMBER, "Expect number for size of free response section."); // consume nubmer of lines
                 return new Question(type, problem, new List<Token>(), solution);
             }
-            else if (Check(TokenType.SA))
+            else if (Check(TokenType.SA)) // if short answer
             {
-                Token type = Advance();
-                Token problem = Consume(TokenType.STRING, "Expect string for question.");
-                if (Peek().GetType() == TokenType.STRING || Peek().GetType() == TokenType.NUMBER)
+                Token type = Advance(); // consume sa
+                Token problem = Consume(TokenType.STRING, "Expect string for question."); // consume question
+                if (Peek().GetType() == TokenType.STRING || Peek().GetType() == TokenType.NUMBER) // if other tokens, skip them
                 {
                     Console.WriteLine("Improper number of arguments to Short Answer question, skipping extras");
                     while (Peek().GetType() == TokenType.STRING || Peek().GetType() == TokenType.NUMBER)
@@ -237,6 +237,7 @@ namespace quick_interpreter
             }
             else
             {
+                // else, invalid question type --> error
                 Console.WriteLine("Invalid question type");
                 return new Question();
             }
@@ -299,6 +300,7 @@ namespace quick_interpreter
         }
     }
 
+    // Question: class for holding question
     public class Question
     {
         public readonly Token type;
@@ -310,6 +312,8 @@ namespace quick_interpreter
         {
             Console.WriteLine("Garbage Question.");
         }
+
+        // Question: constructor taking the type, the problem, a list of options, and the solution
         public Question(Token type, Token problem, List<Token> options, Token solution)
         {
             this.type = type;
