@@ -8,12 +8,14 @@ namespace quick_interpreter
 {
     public class Environment
     {
+        // Dictionaries holding tokens and their corresponding questions
         public readonly Dictionary<string, List<Question>> banks = new();
         public readonly Dictionary<string, List<Question>> tests = new();
 
+        // GetBank: returns list of questions in a bank from its name
         public List<Question>? GetBank(Token name)
         {
-            if (banks.ContainsKey(name.lexeme))
+            if (banks.ContainsKey(name.lexeme)) // checks if bank exists
             {
                 return banks[name.lexeme];
             }
@@ -21,9 +23,10 @@ namespace quick_interpreter
             return null;
         }
 
+        // GetTest: returns list of questions in a test from its name
         public List<Question>? GetTest(Token name)
         {
-            if (tests.ContainsKey(name.lexeme))
+            if (tests.ContainsKey(name.lexeme)) // checks if test exists
             {
                 return tests[name.lexeme];
             }
@@ -31,6 +34,7 @@ namespace quick_interpreter
             return null;
         }
 
+        // DefineBank: creates new bank with name and questions
         public void DefineBank(Token name, List<Question> questions)
         {
             banks.Add(name.lexeme, questions);
@@ -44,14 +48,15 @@ namespace quick_interpreter
             */
         }
 
+        // AddToBank: adds question to bank of given name
         public void AddToBank(Token name, List<Question> questions)
         {
-            if (!(banks.ContainsKey(name.lexeme)))
+            if (!(banks.ContainsKey(name.lexeme))) // checks if bank exists
             {
                 Console.WriteLine("Bank " + name.lexeme + " does not exist.");
                 return;
             }
-            banks[name.lexeme].AddRange(questions);
+            banks[name.lexeme].AddRange(questions); // add question
 
             /* debugging: output updated bank
             Console.WriteLine("Bank " + name.lexeme + ":");
@@ -62,10 +67,11 @@ namespace quick_interpreter
             */
         }
 
+        // DefineTest: adds questions from banks to test, then adds test to the test dictionary
         public void DefineTest(Token name, List<Token> bankList)
         {
             List<Question> questions = new();
-            foreach (Token bank in bankList)
+            foreach (Token bank in bankList) // for each bank provided, add questions
             {
                 if (banks.ContainsKey(bank.lexeme)){
                     questions.AddRange(banks[bank.lexeme]);
@@ -78,15 +84,18 @@ namespace quick_interpreter
             tests.Add(name.lexeme, questions);
         }
 
+        // DeleteQuestion: delete question at index from bank called name
         public void DeleteQuestion(Token name, int index)
         {
             List<Question>? questions = GetBank(name);
+
+            // check if bank exists
             if (questions == null)
             {
                 Console.WriteLine("Bank " + name.lexeme + " does not exist.");
                 return;
             }
-            if(index <= questions.Count)
+            if(index <= questions.Count) // checks if index is valid
             {
                 banks[name.lexeme].RemoveAt(index-1);
             }
@@ -97,10 +106,13 @@ namespace quick_interpreter
 
         }
 
+        // updateAnswer: update the answer for a question at position index in bank called name
         public void updateAnswer(Token name, int index, Token answer)
         {
             index = index - 1; // start numbering at 1
             List<Question>? questions = GetBank(name);
+
+            // check if bank exists
             if (questions == null)
             {
                 Console.WriteLine("Bank " + name.lexeme + " does not exist.");
@@ -108,7 +120,7 @@ namespace quick_interpreter
             }
             else
             {
-                if (index >= 0 && index < banks[name.lexeme].Count)
+                if (index >= 0 && index < banks[name.lexeme].Count) // checks if index is valid
                 {
                     banks[name.lexeme][index].solution = answer;
                 }
