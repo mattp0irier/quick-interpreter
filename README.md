@@ -52,33 +52,8 @@ SET = 'set_ans', BANK_NAME, '[', NUMBER, ']', SOLUTION, ';';
 
 ### Syntax
 
-##### Questions
-There are four types of question: multiple choice, true/false, short answer, and free response.
-
-Multiple choice questions can have up to 4 answers displayed. The correct answer is set by a number at the end of the question indicating which choice is correct (this value starts at 1).
-```
-question bank1 mc "This is the question text" "1st answer" "2nd answer" "3rd answer" "4th answer" 4;
-question bank1 mc "This question only has 2 answers" "The correct one" "The incorrect one" 1;
-```
-
-True/false questions follow similar syntax to multiple choice questions, with the correct answer being set by either a T or F.
-
-```
-question bank1 tf "This statement is false" F;
-```
-
-Short answer questions simply ask for the question. Quick provides a set amount of space to answer these questions when generating tests.
-```
-question bank1 sa "This is a short answer question";
-```
-
-Free response questions ask for the question and the number of lines to provide for writing on the test.
-```
-question bank1 fr "This is a free response question" 12;
-```
-
 ##### Banks
-Banks serve as collections of questions. Banks can be created as shown below.
+Banks serve as collections of questions. Banks can be created as shown below, and are the only way to store questions in Quick.
 ```
 bank bank1;
 ```
@@ -100,6 +75,33 @@ The answer for a multiple choice or true/false question already in a bank can be
 
 ```
 set_ans bank1[2] F;
+```
+
+##### Questions
+You would be hard pressed to find a test without any questions. Thankfully, questions are very easy to declare in Quick.
+
+There are four types of question: multiple choice, true/false, short answer, and free response. Declaring a question into a bank appends it to the end of that bank's question list.'
+
+Multiple choice questions consist of a prompt and at least one answer option. The correct answer is set by a number at the end of the question indicating which choice is correct (this value starts at 1).
+```
+question bank1 mc "This is the question text" "1st answer" "2nd answer" "3rd answer" "4th answer" 4;
+question bank1 mc "This question only has 2 answers" "The correct one" "The incorrect one" 1;
+```
+
+True/false questions follow similar syntax to multiple choice questions, with the correct answer being set by either a T or F.
+
+```
+question bank1 tf "This statement is false" F;
+```
+
+Short answer questions simply ask for the question. Quick provides a set amount of space to answer these questions when generating tests.
+```
+question bank1 sa "This is a short answer question";
+```
+
+Free response questions ask for the question and the number of lines to provide for writing on the test.
+```
+question bank1 fr "This is a free response question" 12;
 ```
 
 ##### Tests
@@ -158,9 +160,10 @@ The outputs of our tests are stored in the files with the `.rtf` extension.
 ### Future Improvements
 We recognize that this language could be improved in many ways given more time and energy. Listed below are some of our ideas to improve the language:
 
-- Add matching question type
+- Add more question types: a matching section, or multiple choice questions with more than one correct option
 - Allow for questions to be paired (i.e. a true/false question followed by an explanation free response question)
-- Allow for shuffling of multiple choice answers within a question
+- Random presentation of options within a multiple choice question
+- Order an exam by topic using a keyword search
 - Include *x* questions from a bank on a test
 - Implement adding images
 - Save in other document formats (PDF, DOCX, etc.)
