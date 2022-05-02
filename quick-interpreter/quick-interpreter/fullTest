@@ -1,0 +1,53 @@
+﻿/ Declaring questions in the bank declaration
+bank section1 {
+	sa "Provide one advantage and disadvantage of monitors.",
+	sa "What is the difference between a semaphore wait and a condition variable wait?",
+	sa "Name a one-way, environment-specific interprocess communication mechanism.",
+	mc "This is an unfair question." "good" "luck" "guessing" "correctly" 3,
+	tf "Interprocess communication requires the kernel." T,
+	tf "Threads are faster to create and destroy than processes." F,
+	mc "Which of these executes the fastest?" "Correlated nested query" "Uncorrelated nested query" "Neither" 2
+};
+
+/ answer to #6 should be T
+set_ans section1[6] T;
+
+/ question #4 is unfair, remove it from the bank
+delete section1[4];
+
+
+/ Adding questions to a bank after delcaration
+bank section2;
+
+question section2 {
+	mc "Which inequality does not fully utilize n ULTs mapped onto m KLTs?"
+		"m > n > 1" "n > m > 1" "n = m > 0" "n > m = 1" 1,
+	mc "A race condition can exist:" "Between multiple threads w/ shared data." "Between mutliple threads w/o shared data."
+		"Between multiple threads when all data is stored appropriately." 2,
+	tf "Using interrupts to implement synchronization requires a privileged instruction." T,
+	mc "When is an entity considered a weak entity in ER diagramming?" "An entity has no relationships with any other entities."
+		"An entity has no attributes." "An entity has no unique key across all entities of its type." 3,
+	tf "In the Works_On table, (ESSN, PNO) is a minimal superkey." T,
+	tf "In the Works_On table, ESSN is a foreign key." T
+};
+
+/ mistake in #2, answer should be 1
+set_ans section2[2] 1;
+
+bank section3 {
+	sa "What is one advantage to using a DBMS?",
+	sa "Give one example of metadata associated with emails.",
+	sa "Due to data independence, changes to the internal schema do NOT require changes to what?",
+	tf "A foreign key cannot have a null value." F,
+	tf "An update to a view will change the base table." T,
+	sa "The relation T(A1, A2, A3) is a subset of what domain?",
+};
+
+bank free_responses {
+	fr "What is the best programming language and why is it Swift?" 15,
+	fr "What is the meaning of life?" 10
+};
+
+test QuickDemo {section1, section2, section3, free_responses};
+generate QuickDemo "Quick Demonstration";
+generate QuickDemo "Quick Demonstration" 2 shuffle;

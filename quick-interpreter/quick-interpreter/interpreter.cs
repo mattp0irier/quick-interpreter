@@ -349,13 +349,27 @@ namespace quick_interpreter
                     par.DefaultCharFormat.FontSize = 12;
 
                     // save with correct title in subfolder
-                    if(isKey == 1)
+                    if (quantity != 1)
                     {
-                        doc.save("output/" + subfolder + fileName + "-" + Char.ToString((char)('A' + testNumber - 1)) + "-key.rtf");
+                        if (isKey == 1)
+                        {
+                            doc.save("output/" + subfolder + fileName + "-" + Char.ToString((char)('A' + testNumber - 1)) + "-key.rtf");
+                        }
+                        else
+                        {
+                            doc.save("output/" + subfolder + fileName + "-" + Char.ToString((char)('A' + testNumber - 1)) + ".rtf");
+                        }
                     }
                     else
                     {
-                        doc.save("output/" + subfolder + fileName + "-" + Char.ToString((char)('A' + testNumber - 1)) + ".rtf");
+                        if (isKey == 1)
+                        {
+                            doc.save("output/" + subfolder + fileName + "-key.rtf");
+                        }
+                        else
+                        {
+                            doc.save("output/" + subfolder + fileName + ".rtf");
+                        }
                     }
 
                     if (isKey == 1)
