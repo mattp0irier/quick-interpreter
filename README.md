@@ -39,13 +39,13 @@ MORE_QUESTIONS = NEW_QUESTION, ',';
 
 QUESTION_BLOCK = '{', [ { MORE_QUESTIONS } , NEW_QUESTION ], '}';
 
-generate = 'generate', TEST_NAME, TEST_TITLE, [NUMBER], ['shuffle'], ';';
-bank = 'bank', BANK_NAME, [QUESTION_BLOCK], ';';
-test = 'test', TEST_NAME, [QUESTION_BLOCK], ';'; 
-question = 'question', NEW_QUESTION, ';' | 'question', QUESTION_BLOCK, ';';
-print = 'print', BANK_NAME, ';' | 'print', TEST_NAME, ';';
-delete = 'delete', BANK_NAME, '[', NUMBER, ']', ';';
-set = 'set', BANK_NAME, '[', NUMBER, ']', SOLUTION, ';';
+GENERATE = 'generate', TEST_NAME, TEST_TITLE, [NUMBER], ['shuffle'], ';';
+BANK = 'bank', BANK_NAME, [QUESTION_BLOCK], ';';
+TEST = 'test', TEST_NAME, [QUESTION_BLOCK], ';'; 
+QUESTION = 'question', NEW_QUESTION, ';' | 'question', QUESTION_BLOCK, ';';
+PRINT = 'print', BANK_NAME, ';' | 'print', TEST_NAME, ';';
+DELETE = 'delete', BANK_NAME, '[', NUMBER, ']', ';';
+SET = 'set_ans', BANK_NAME, '[', NUMBER, ']', SOLUTION, ';';
 ```
 
 ---
