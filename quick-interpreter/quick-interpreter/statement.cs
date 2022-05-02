@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// statement.cs: part of Quick by Matt Poirier and Trevor Russell
+
 namespace quick_interpreter
 {
     // Statement: abstract class for each type of statement in Quick

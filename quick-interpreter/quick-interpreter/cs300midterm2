@@ -1,3 +1,5 @@
+/ cs300midterm2: a Quick file, by Matt Poirier and Trevor Russell
+
 bank shortAnswer {
 	sa "What does reentrant mean as it relates to code?",
 	sa "Name the type of allocated memory that is implicitly managed by the compiler.",

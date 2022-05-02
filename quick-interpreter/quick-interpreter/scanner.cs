@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
+// scanner.cs: part of Quick by Matt Poirier and Trevor Russell
+
 namespace quick_interpreter
 {
     public class Scanner

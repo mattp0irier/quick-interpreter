@@ -1,4 +1,6 @@
-﻿/ Declaring questions in the bank declaration
+﻿/ Fulltest: a Quick file by Matt Poirier and Trevor Russell
+
+/ Declaring questions in the bank declaration
 bank section1 {
 	sa "Provide one advantage and disadvantage of monitors.",
 	sa "What is the difference between a semaphore wait and a condition variable wait?",
