@@ -11,11 +11,13 @@ namespace quick_interpreter
         readonly List<Token> tokens;
         int cur = 0;
 
+        // Parser: constructor taking list of tokens
         public Parser(List<Token> tokens)
         {
             this.tokens = tokens;
         }
 
+        // Parse: parses tokens into statements
         public List<Statement> Parse()
         {
             List<Statement> statements = new();
@@ -23,6 +25,7 @@ namespace quick_interpreter
             return statements;
         }
 
+        // Stmt: matches function based on keyword and calls appropriate parsing function accordingly
         Statement Stmt()
         {
             if (Match(TokenType.BANK)) return BankStmt();
@@ -36,165 +39,176 @@ namespace quick_interpreter
             return null;
         }
 
+        // GenerateStmt: parses generate statement
         Statement GenerateStmt()
         {
-            Token name = Consume(TokenType.IDENTIFIER, "Expect test name.");
-            Token title = Consume(TokenType.STRING, "Expect test title after test name.");
+            Token name = Consume(TokenType.IDENTIFIER, "Expect test name."); // consume test name
+            Token title = Consume(TokenType.STRING, "Expect test title after test name."); // consume test title
+
             int quantity = 1;
-            if (Check(TokenType.NUMBER))
+            if (Check(TokenType.NUMBER)) // check for quantity of tests to generate
             {
                 quantity = int.Parse(Advance().lexeme);
             }
-            if (Check(TokenType.SHUFFLE))
+
+            if (Check(TokenType.SHUFFLE)) // check if shuffle keyword used
             {
                 Advance();
-                Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon.");
+                Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon."); // consume semicolon
                 return new GenerateStmt(name, title, quantity, true);
             }
             else
             {
-                Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon.");
+                Consume(TokenType.SEMICOLON, "Generate statement must end with semicolon."); // consume semicolon
                 return new GenerateStmt(name, title, quantity, false);
             }
         }
 
+        // TestStmt: parses test statement
         Statement TestStmt()
         {
-            Token name = Consume(TokenType.IDENTIFIER, "Expect test name.");
+            Token name = Consume(TokenType.IDENTIFIER, "Expect test name."); // consume test name
 
             List<Token> banks = new();
-            if (Match(TokenType.LEFT_BRACE))
+            if (Match(TokenType.LEFT_BRACE)) // check for brace listing multiple banks
             {
-                while (Check(TokenType.IDENTIFIER))
+                while (Check(TokenType.IDENTIFIER)) // consume banks while identifier next
                 {
                     banks.Add(Advance());
-                    if (Match(TokenType.RIGHT_BRACE)) break;
-                    Consume(TokenType.COMMA, "Bank names are separated by a comma.");
+                    if (Match(TokenType.RIGHT_BRACE)) break; // check for match to right brace indicating end
+                    Consume(TokenType.COMMA, "Bank names are separated by a comma."); // consume comma separating banks
                 }
             }
             else
             {
+                // else one bank, so consume it
                 banks.Add(Consume(TokenType.IDENTIFIER, "Test must include at least one question bank."));
             }
-            Consume(TokenType.SEMICOLON, "Test delcaration must end with semicolon.");
+            Consume(TokenType.SEMICOLON, "Test delcaration must end with semicolon."); // consume semicolon
 
 
             return new TestStmt(name, banks);
         }
 
+        // BankStmt: parses bank statement
         Statement BankStmt()
         {
-            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name.");
+            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name."); // consume bank name
 
             List<Question> questions = new();
             //May include questions with the declaration
             if (Match(TokenType.LEFT_BRACE))
             {
-                while(!(Peek().GetType() == TokenType.RIGHT_BRACE))
+                while(!(Peek().GetType() == TokenType.RIGHT_BRACE)) // while questions, parse them
                 {
                     questions.Add(ParseQuestion());
-                    if (Peek().GetType() == TokenType.RIGHT_BRACE) break;
-                    Consume(TokenType.COMMA, "Questions must be separated by a comma");
+                    if (Peek().GetType() == TokenType.RIGHT_BRACE) break; // if right brace, break loop
+                    Consume(TokenType.COMMA, "Questions must be separated by a comma"); // otherwise consume comma
                 }
-                Consume(TokenType.RIGHT_BRACE, "Question block must end with }");
+                Consume(TokenType.RIGHT_BRACE, "Question block must end with }"); // consume right brace
             }
-            Consume(TokenType.SEMICOLON, "Bank Statement must end with ;");
+            Consume(TokenType.SEMICOLON, "Bank Statement must end with ;"); // consume semicolon
 
             return new BankStmt(name, questions);
         }
 
+        // QuestionStmt: parses question statement
         Statement QuestionStmt()
         {
-            Token bankName = Consume(TokenType.IDENTIFIER, "Please include a bank name when adding questions.");
+            Token bankName = Consume(TokenType.IDENTIFIER, "Please include a bank name when adding questions."); // consume bank name
 
             List<Question> questions = new();
             //May include questions with the declaration
             if (Match(TokenType.LEFT_BRACE))
             {
-                while (!(Peek().GetType() == TokenType.RIGHT_BRACE))
+                while (!(Peek().GetType() == TokenType.RIGHT_BRACE)) // loop while questions to parse
                 {
-                    questions.Add(ParseQuestion());
-                    if (Check(TokenType.RIGHT_BRACE)) break;
-                    Consume(TokenType.COMMA, "Questions must be separated by a comma");
+                    questions.Add(ParseQuestion()); // call ParseQuestion
+                    if (Check(TokenType.RIGHT_BRACE)) break; // break if right brace
+                    Consume(TokenType.COMMA, "Questions must be separated by a comma"); // otherwise consume comma
                 }
-                Consume(TokenType.RIGHT_BRACE, "Question block must end with }");
+                Consume(TokenType.RIGHT_BRACE, "Question block must end with }"); // consume right brace
             }
             else
             {
                 // Only one question
                 questions.Add(ParseQuestion());
             }
-            Consume(TokenType.SEMICOLON, "Question Statement must end with ;");
+            Consume(TokenType.SEMICOLON, "Question Statement must end with ;"); // consume semicolon
 
             return new QuestionStmt(bankName, questions);
         }
 
+        // PrintStmt: generate print statement
         Statement PrintStmt()
         {
-            Token itemToPrint = Consume(TokenType.IDENTIFIER, "Invalid identifier");
-            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon.");
+            Token itemToPrint = Consume(TokenType.IDENTIFIER, "Invalid identifier"); // consume token name to print
+            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon."); // consume semicolon
             return new PrintStmt(itemToPrint);
         }
 
+        // DeleteStmt: generate delete statement
         Statement DeleteStmt()
         {
-            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name.");
-            Consume(TokenType.LEFT_BRACKET, "Expect left bracket.");
+            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name."); // consume bank name
+            Consume(TokenType.LEFT_BRACKET, "Expect left bracket."); // consume left bracket
 
-            int index = int.Parse(Consume(TokenType.NUMBER, "Expect index").lexeme);
-            Consume(TokenType.RIGHT_BRACKET, "Expect right bracket.");
+            int index = int.Parse(Consume(TokenType.NUMBER, "Expect index").lexeme); // consume index
+            Consume(TokenType.RIGHT_BRACKET, "Expect right bracket."); // consume right bracket
 
-            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon.");
+            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon."); // consume semicolon
 
             return new DeleteStmt(name, index);
         }
 
+        // SetStmt: generate set statement
         Statement SetStmt()
         {
-            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name.");
-            Consume(TokenType.LEFT_BRACKET, "Expect left bracket.");
+            Token name = Consume(TokenType.IDENTIFIER, "Expect bank name."); // consume bank name
+            Consume(TokenType.LEFT_BRACKET, "Expect left bracket."); // consume left bracket
 
-            int index = int.Parse(Consume(TokenType.NUMBER, "Expect index").lexeme);
-            Consume(TokenType.RIGHT_BRACKET, "Expect right bracket.");
+            int index = int.Parse(Consume(TokenType.NUMBER, "Expect index").lexeme); // consume index
+            Consume(TokenType.RIGHT_BRACKET, "Expect right bracket."); // consume right bracket
 
             Token answer = null;
-            if (Match(TokenType.T) || Match(TokenType.F) || Match(TokenType.NUMBER))
+            if (Match(TokenType.T) || Match(TokenType.F) || Match(TokenType.NUMBER)) // match either true, false, or number
             {
                 answer = Previous();
             }
-            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon.");
+            Consume(TokenType.SEMICOLON, "Statements must end with a semicolon."); // consume semicolon
 
             return new SetStmt(name, index, answer);
         }
 
+        // ParseQuestion: parse each type of question properly
         Question ParseQuestion()
         {
-            if (Check(TokenType.MC))
+            if (Check(TokenType.MC)) // if multiple choice
             {
-                Token type = Advance();
-                Token problem = Consume(TokenType.STRING, "Expect string for question.");
+                Token type = Advance(); // consume mc
+                Token problem = Consume(TokenType.STRING, "Expect string for question."); // consume question
                 List<Token> options = new();
-                options.Add(Consume(TokenType.STRING, "Must provide at least one answer."));
-                while (Check(TokenType.STRING))
+                options.Add(Consume(TokenType.STRING, "Must provide at least one answer.")); // consume first answer
+                while (Check(TokenType.STRING)) // while more answers, consume
                 {
                     options.Add(Advance());
                 }
-                Token solution = Consume(TokenType.NUMBER, "Solution must be a number.");
-                if ((int)solution.GetLiteral() < 1 || (int)solution.GetLiteral() > options.Count())
+                Token solution = Consume(TokenType.NUMBER, "Solution must be a number."); // consume index of answer
+                if ((int)solution.GetLiteral() < 1 || (int)solution.GetLiteral() > options.Count()) // check number provided is valid
                 {
                     Console.WriteLine("Solution must be in the range 1 - n, where n is the number of answers provided.");
                 }
                 return new Question(type, problem, options, solution);
             }
-            else if (Check(TokenType.TF))
+            else if (Check(TokenType.TF)) // if true/false
             {
-                Token type = Advance();
-                Token problem = Consume(TokenType.STRING, "Expect string for question.");
+                Token type = Advance(); // consume tf
+                Token problem = Consume(TokenType.STRING, "Expect string for question."); // consume question
                 List<Token> options = new();
-                options.Add(new Token(TokenType.T, "True", "True", -1));
-                options.Add(new Token(TokenType.F, "False", "False", -1));
+                options.Add(new Token(TokenType.T, "True", "True", -1)); // create true option
+                options.Add(new Token(TokenType.F, "False", "False", -1)); // create false option
                 Token solution = Advance();
-                if (solution.type != TokenType.T && solution.type != TokenType.F)
+                if (solution.type != TokenType.T && solution.type != TokenType.F) // match solution as T or F
                 {
                     Console.WriteLine("Answer to T/F question must be T or F.");
                 }

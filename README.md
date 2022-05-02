@@ -104,6 +104,14 @@ Free response questions ask for the question and the number of lines to provide 
 question bank1 fr "This is a free response question" 12;
 ```
 
+Questions of various types can be generated in bulk using the following syntax:
+```
+question Bank1 {
+	tf "This is a True/False question; the answer is False." F,
+	fr "This is a free response question." 12
+};
+```
+
 ##### Tests
 Tests compile questions from banks for a single exam. Tests can either pull from one bank or multiple banks, as shown in the commands below.
 ```
