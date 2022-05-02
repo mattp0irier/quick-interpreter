@@ -246,7 +246,7 @@ namespace quick_interpreter
                     par.DefaultCharFormat.FontSize = 12;
                     fmt = par.addCharFormat();
                     fmt.FontStyle.addStyle(FontStyleFlag.Bold);
-                    lineCounter += 2;
+                    lineCounter = (lineCounter + 2) % 50;
 
                     if ((isKey == 0) && isShuffle) questions = shuffle(questions);
 
@@ -257,26 +257,26 @@ namespace quick_interpreter
                         {
                             par = doc.addParagraph();
                             par = doc.addParagraph();
-                            lineCounter = (lineCounter + 2) % 48;
+                            lineCounter = (lineCounter + 2) % 50;
                         }
                         else
                         {
                             while (lineCounter != 0)
                             {
                                 par = doc.addParagraph();
-                                lineCounter = (lineCounter + 1) % 48;
+                                lineCounter = (lineCounter + 1) % 50;
                             }
                         }
-                        Console.WriteLine("Question " + i + " starts on line " + lineCounter);
+                        //Console.WriteLine("Question " + i + " starts on line " + lineCounter);
                         par.Alignment = Align.FullyJustify;
                         par.setText((i + 1) + ".\t" + questions[i].problem.lexeme);
                         for (int j = 0; j < questions[i].options.Count; j++)
                         { 
                             par = doc.addParagraph();
-                            par.LineSpacing = 15;
+                            //par.LineSpacing = 15;
                             par.Alignment = Align.FullyJustify;
                             par.setText("\t" + (char)(j + 65) + ".\t" + questions[i].options[j].lexeme); // letter for answer
-                            lineCounter = (lineCounter + 1) % 48;
+                            lineCounter = (lineCounter + 1) % 50;
 
                             // bold answer
                             if(isKey == 1 && (questions[i].type.type == TokenType.MC && ((j + 1 == int.Parse(questions[i].solution.lexeme))) || questions[i].type.type == TokenType.TF && questions[i].options[j].type == questions[i].solution.type))
@@ -292,20 +292,20 @@ namespace quick_interpreter
                             par = doc.addParagraph();
                             par = doc.addParagraph();
                             par = doc.addParagraph();
-                            lineCounter = (lineCounter + 3) % 48;
+                            lineCounter = (lineCounter + 3) % 50;
                         }
 
                         // lines for free response
                         if (questions[i].type.type == TokenType.FR)
                         {
                             par = doc.addParagraph();
-                            lineCounter = (lineCounter + 1) % 48;
+                            lineCounter = (lineCounter + 1) % 50;
                             for (int k = 0; k < int.Parse(questions[i].solution.lexeme); k++)
                             {
                                 par = doc.addParagraph();
                                 //par.LineSpacing = 12;
                                 par.setText("\t____________________________________________________________________________");
-                                lineCounter = (lineCounter + 1) % 48;
+                                lineCounter = (lineCounter + 1) % 50;
                             }
                         }
                     }
@@ -337,18 +337,18 @@ namespace quick_interpreter
         {
            if (question.type.type == TokenType.FR)
             {
-                if (lineCount + int.Parse(question.solution.lexeme)  < 48) return 0;
-                else return 48 - lineCount;
+                if (lineCount + int.Parse(question.solution.lexeme)  < 50) return 0;
+                else return 50 - lineCount;
             }
            else if (question.type.type == TokenType.SA)
             {
-                if (lineCount + 3 < 48) return 0;
-                else return 48 - lineCount;
+                if (lineCount + 3 < 50) return 0;
+                else return 50 - lineCount;
             }
             else
             {
-                if (lineCount + question.options.Count < 48) return 0;
-                else return 48 - lineCount;
+                if (lineCount + question.options.Count < 50) return 0;
+                else return 50 - lineCount;
             }
         }
     }
